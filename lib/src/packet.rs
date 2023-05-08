@@ -7,11 +7,19 @@ use log::{info, warn};
 pub struct KingSongPacket {
     pub data: [u8; 14],
     pub command: u8,
+    pub footer: Option<[u8; 3]>,
 }
 
 impl fmt::Display for KingSongPacket {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "{:x?} -> {:x?}", self.command, self.data)
+        match self.footer {
+            Some(metadata) => {
+                write!(f, "{:x?} -> {:x?} {:x?}", self.command, self.data, metadata)
+            }
+            None => {
+                write!(f, "{:x?} -> {:x?}", self.command, self.data)
+            }
+        }
     }
 }
 
@@ -33,6 +41,7 @@ impl KingSongPacket {
         Ok(KingSongPacket {
             data: data[2..16].try_into()?,
             command: data[16],
+            footer: Some(data[17..20].try_into()?),
         })
     }
 
@@ -57,6 +66,7 @@ impl KingSongPacket {
         Ok(KingSongPacket {
             data: data.try_into()?,
             command,
+            footer: None,
         })
     }
 
