@@ -188,7 +188,6 @@ Payload
 
 ### f1 and f2 are full of data
 
-
 - f1 : iterates through [0..6]
 - f2 : iterates through [0..6]
 
@@ -207,3 +206,7 @@ Payload
 
 - f1 : re-iterates through [b0] : All 0's
 - f2 : re-iterates through [b0] : All 0's
+
+### Firmware Download
+
+wget https://www.kingsong.vip/upload/firmware/2023/02/01/2023-02-01-03-20-46.bin

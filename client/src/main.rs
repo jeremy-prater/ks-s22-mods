@@ -1,7 +1,12 @@
+#[macro_use]
+extern crate num_derive;
+extern crate num;
+
 use anyhow::Result;
 use bluer::{gatt::remote::Service, Adapter, Device};
 use futures::{pin_mut, StreamExt};
 use log::{info, warn};
+use s22_library::ble::BleEvent;
 use s22_library::packet::KingSongPacket;
 use std::cmp::Ordering;
 use std::collections::{HashMap, VecDeque};
@@ -50,24 +55,12 @@ async fn main() -> Result<()> {
                         _ => {}
                     }
 
-                    let write_characteristic = characteristic.clone();
-                    let command_rx = command_rx.clone();
-                    tokio::task::spawn(async move {
-                        info!("Starting KS write loop");
-                        // Send next command
-                        while let Ok(command) = command_rx.recv_async().await {
-                            info!("S22 cmd    : {}", command);
-                            let command = command.generate_command();
-                            write_characteristic.write(&command).await.unwrap();
-                        }
-                    });
-
-                    let characteristic = characteristic.clone();
+                    let notify_characteristic = characteristic.clone();
                     let notify_tx = notify_tx.clone();
                     let s22_state: Arc<Mutex<HashMap<u8, KingSongPacket>>> = s22_state.clone();
                     tokio::task::spawn(async move {
                         info!("Starting KS notify read loop");
-                        let notify_stream = characteristic.notify().await.unwrap();
+                        let notify_stream = notify_characteristic.notify().await.unwrap();
                         pin_mut!(notify_stream);
                         while let Some(event) = notify_stream.next().await {
                             match KingSongPacket::from_raw(event.clone()) {
@@ -97,6 +90,17 @@ async fn main() -> Result<()> {
                             }
                         }
                     });
+                    let write_characteristic = characteristic.clone();
+                    let command_rx = command_rx.clone();
+                    tokio::task::spawn(async move {
+                        info!("Starting KS write loop");
+                        // Send next command
+                        while let Ok(command) = command_rx.recv_async().await {
+                            info!("S22 cmd    : {}", command);
+                            let command = command.generate_command();
+                            write_characteristic.write(&command).await.unwrap();
+                        }
+                    });
                 }
             }
             Ok(s22_library::ble::KS_CHARACTERISTIC_1_UUID) => {
@@ -113,29 +117,28 @@ async fn main() -> Result<()> {
         Arc::new(Mutex::new(VecDeque::new()));
     {
         let mut lock = command_sequence.lock().await;
-        // lock.push_back(0x44); // Not sure what this does...
         lock.push_front(KingSongPacket {
-            command: 0x9b,
+            command: BleEvent::EnableNotifications as u8,
             ..Default::default()
         });
         lock.push_front(KingSongPacket {
-            command: 0x63,
+            command: BleEvent::RequestSerialNumber as u8,
+            ..Default::default()
+        });
+        lock.push_front(KingSongPacket {
+            command: BleEvent::Some6D as u8,
             ..Default::default()
         });
         // lock.push_front(KingSongPacket {
-        //     command: 0x6d,
+        //     command: BleEvent::Some54Req as u8,
         //     ..Default::default()
         // });
         // lock.push_front(KingSongPacket {
-        //     command: 0x54,
+        //     command: BleEvent::Some5EReq as u8,
         //     ..Default::default()
         // });
         // lock.push_front(KingSongPacket {
-        //     command: 0x5e,
-        //     ..Default::default()
-        // });
-        // lock.push_front(KingSongPacket {
-        //     command: 0x98,
+        //     command: BleEvent::Some44Req as u8,
         //     ..Default::default()
         // });
     }
