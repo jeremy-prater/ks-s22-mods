@@ -1,9 +1,9 @@
-use std::fmt;
-
+use crate::ble::BleEvent;
 use anyhow::{bail, Result};
 use log::{info, warn};
+use std::fmt;
 
-#[derive(Debug, Default)]
+#[derive(Debug, Default, PartialEq, Eq, Clone)]
 pub struct KingSongPacket {
     pub data: [u8; 14],
     pub command: u8,
@@ -12,18 +12,29 @@ pub struct KingSongPacket {
 
 impl fmt::Display for KingSongPacket {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        match self.footer {
+        let payload = match self.footer {
             Some(metadata) => {
-                write!(f, "{:x?} -> {:x?} {:x?}", self.command, self.data, metadata)
+                format!("{:x?} {:x?}", self.data, metadata)
             }
             None => {
-                write!(f, "{:x?} -> {:x?}", self.command, self.data)
+                format!("{:x?}", self.data)
             }
-        }
+        };
+
+        let command = match self.event() {
+            Some(event) => format!("{:?}", event),
+            None => format!("Unknown ({:x?})", self.command),
+        };
+
+        write!(f, "{} {}", command, payload)
     }
 }
 
 impl KingSongPacket {
+    pub fn event(&self) -> Option<BleEvent> {
+        num::FromPrimitive::from_u8(self.command)
+    }
+
     pub fn from_raw(data: Vec<u8>) -> Result<Self> {
         if data.len() != 20 {
             warn!("Incorrect command length {:x?}", data);

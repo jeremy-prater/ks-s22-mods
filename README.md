@@ -25,7 +25,56 @@ This represents a `fake` S22 by emulating the protocol and BLE services/characte
 
 # Command codes
 
-- TODO : work in progress
+## 0x9B - Subscribe to notification events
+
+```
+Payload : None
+```
+
+
+### Return the following data
+
+```
+0:00:00.192877364 ::: s22_client [INFO] > S22 update : bb -> [4b, 53, 2d, 53, 32, 32, 2d, 30, 32, 32, 37, 0, 0, 0] [14, 85, fd]
+```
+
+### Start notifying on the following responses
+
+
+- Known
+
+```
+0:00:00.652879995 ::: s22_client [INFO] > S22 update : a9 -> [3d, 2e, 0, 0, c, 0, 8d, 16, 0, 0, 40, 6, 0, e0] [14, 5a, 5a]
+0:00:00.252868416 ::: s22_client [INFO] > S22 update : b9 -> [0, 0, 0, 0, 42, 0, 0, 0, 14, 1, 0, 0, 78, 5] [14, 5a, 5a]
+```
+
+- Unknown
+
+```
+0:00:00.332831626 ::: s22_client [INFO] > S22 update : f5 -> [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1e, 0] [14, 5a, 5a]
+0:00:00.572859715 ::: s22_client [INFO] > S22 update : f1 -> [eb, 2d, 0, 0, d0, 2, e8, 3, 0, 0, e8, 3, 48, f] [0, 5a, 5a]
+0:00:00.412916114 ::: s22_client [INFO] > S22 update : f6 -> [d0, 7, 0, 0, 0, 0, 79, 47, 0, 0, 51, 0, 0, 0] [14, 5a, 5a]
+0:00:00.492860137 ::: s22_client [INFO] > S22 update : c9 -> [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0] [14, 5a, 5a]
+```
+
+---
+## Command 0x9B is required to subscribe to notify events. This is required to get responses for the following commands.
+---
+
+## 0x63 - Request Serial Number
+
+
+```
+Payload : None
+```
+
+- Returns 0xB3 - Serial Number
+
+```
+0:00:00.278928166 ::: s22_client [INFO] > S22 update : b3 -> [4b, 53,  --- redacted ---, 31, 46] [30, 35, 36]
+```
+
+
 
 # Response Codes
 

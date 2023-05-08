@@ -3,7 +3,8 @@ use bluer::{gatt::remote::Service, Adapter, Device};
 use futures::{pin_mut, StreamExt};
 use log::{info, warn};
 use s22_library::packet::KingSongPacket;
-use std::collections::VecDeque;
+use std::cmp::Ordering;
+use std::collections::{HashMap, VecDeque};
 use std::sync::Arc;
 use std::time::Duration;
 use tokio::sync::Mutex;
@@ -34,6 +35,8 @@ async fn main() -> Result<()> {
     let (command_tx, command_rx) = flume::unbounded::<KingSongPacket>();
     let (notify_tx, notify_rx) = flume::unbounded();
 
+    let s22_state = Arc::new(Mutex::new(HashMap::new()));
+
     for characteristic in service.characteristics().await? {
         match characteristic.uuid().await {
             Ok(s22_library::ble::KS_CHARACTERISTIC_READ_UUID) => {
@@ -58,9 +61,10 @@ async fn main() -> Result<()> {
                             write_characteristic.write(&command).await.unwrap();
                         }
                     });
-                    
+
                     let characteristic = characteristic.clone();
                     let notify_tx = notify_tx.clone();
+                    let s22_state: Arc<Mutex<HashMap<u8, KingSongPacket>>> = s22_state.clone();
                     tokio::task::spawn(async move {
                         info!("Starting KS notify read loop");
                         let notify_stream = characteristic.notify().await.unwrap();
@@ -68,7 +72,23 @@ async fn main() -> Result<()> {
                         while let Some(event) = notify_stream.next().await {
                             match KingSongPacket::from_raw(event.clone()) {
                                 Ok(response) => {
-                                    info!("S22 update : {}", response);
+                                    let mut lock = s22_state.lock().await;
+                                    let updated = match lock.get(&response.command) {
+                                        Some(packet) => {
+                                            let different = packet != &response;
+                                            if different {
+                                                lock.insert(response.command, response.clone());
+                                            }
+                                            different
+                                        }
+                                        None => {
+                                            lock.insert(response.command, response.clone());
+                                            true
+                                        }
+                                    };
+                                    if updated {
+                                        info!("S22 update : {}", response);
+                                    }
                                     notify_tx.send_async(response).await.unwrap();
                                 }
                                 Err(err) => {
@@ -102,22 +122,22 @@ async fn main() -> Result<()> {
             command: 0x63,
             ..Default::default()
         });
-        lock.push_front(KingSongPacket {
-            command: 0x6d,
-            ..Default::default()
-        });
-        lock.push_front(KingSongPacket {
-            command: 0x54,
-            ..Default::default()
-        });
-        lock.push_front(KingSongPacket {
-            command: 0x5e,
-            ..Default::default()
-        });
-        lock.push_front(KingSongPacket {
-            command: 0x98,
-            ..Default::default()
-        });
+        // lock.push_front(KingSongPacket {
+        //     command: 0x6d,
+        //     ..Default::default()
+        // });
+        // lock.push_front(KingSongPacket {
+        //     command: 0x54,
+        //     ..Default::default()
+        // });
+        // lock.push_front(KingSongPacket {
+        //     command: 0x5e,
+        //     ..Default::default()
+        // });
+        // lock.push_front(KingSongPacket {
+        //     command: 0x98,
+        //     ..Default::default()
+        // });
     }
 
     loop {
