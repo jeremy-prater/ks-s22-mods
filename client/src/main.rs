@@ -5,6 +5,7 @@ use log::{info, warn};
 use s22_library::packet::KingSongPacket;
 use std::collections::VecDeque;
 use std::sync::Arc;
+use std::time::Duration;
 use tokio::sync::Mutex;
 
 #[tokio::main]
@@ -30,7 +31,7 @@ async fn main() -> Result<()> {
     let (device, service) = find_kingsong_s22(adapter, mac).await.unwrap();
     info!("Found KS device : {:?} {:?}", device, service);
 
-    let (command_tx, command_rx) = flume::unbounded();
+    let (command_tx, command_rx) = flume::unbounded::<KingSongPacket>();
     let (notify_tx, notify_rx) = flume::unbounded();
 
     for characteristic in service.characteristics().await? {
@@ -46,6 +47,18 @@ async fn main() -> Result<()> {
                         _ => {}
                     }
 
+                    let write_characteristic = characteristic.clone();
+                    let command_rx = command_rx.clone();
+                    tokio::task::spawn(async move {
+                        info!("Starting KS write loop");
+                        // Send next command
+                        while let Ok(command) = command_rx.recv_async().await {
+                            info!("S22 cmd    : {}", command);
+                            let command = command.generate_command();
+                            write_characteristic.write(&command).await.unwrap();
+                        }
+                    });
+                    
                     let characteristic = characteristic.clone();
                     let notify_tx = notify_tx.clone();
                     tokio::task::spawn(async move {
@@ -53,8 +66,15 @@ async fn main() -> Result<()> {
                         let notify_stream = characteristic.notify().await.unwrap();
                         pin_mut!(notify_stream);
                         while let Some(event) = notify_stream.next().await {
-                            info!("Notify from S22 : {:?}", event);
-                            notify_tx.send_async(event.clone()).await.unwrap();
+                            match KingSongPacket::from_raw(event.clone()) {
+                                Ok(response) => {
+                                    info!("S22 update : {}", response);
+                                    notify_tx.send_async(response).await.unwrap();
+                                }
+                                Err(err) => {
+                                    warn!("KS notify : Packet error : {:?}", err);
+                                }
+                            }
                         }
                     });
                 }
@@ -74,50 +94,47 @@ async fn main() -> Result<()> {
     {
         let mut lock = command_sequence.lock().await;
         // lock.push_back(0x44); // Not sure what this does...
-        command_tx
-            .send_async(KingSongPacket {
-                command: 0x63,
-                ..Default::default()
-            })
-            .await?;
-        command_tx
-            .send_async(KingSongPacket {
-                command: 0x9b,
-                ..Default::default()
-            })
-            .await?;
-        command_tx
-            .send_async(KingSongPacket {
-                command: 0x6d,
-                ..Default::default()
-            })
-            .await?;
-        command_tx
-            .send_async(KingSongPacket {
-                command: 0x54,
-                ..Default::default()
-            })
-            .await?;
-        command_tx
-            .send_async(KingSongPacket {
-                command: 0x5e,
-                ..Default::default()
-            })
-            .await?;
-        command_tx
-            .send_async(KingSongPacket {
-                command: 0x98,
-                ..Default::default()
-            })
-            .await?;
+        lock.push_front(KingSongPacket {
+            command: 0x9b,
+            ..Default::default()
+        });
+        lock.push_front(KingSongPacket {
+            command: 0x63,
+            ..Default::default()
+        });
+        lock.push_front(KingSongPacket {
+            command: 0x6d,
+            ..Default::default()
+        });
+        lock.push_front(KingSongPacket {
+            command: 0x54,
+            ..Default::default()
+        });
+        lock.push_front(KingSongPacket {
+            command: 0x5e,
+            ..Default::default()
+        });
+        lock.push_front(KingSongPacket {
+            command: 0x98,
+            ..Default::default()
+        });
     }
 
     loop {
-        // Send next command
-        let command = command_rx.recv_async().await.unwrap();
-        info!(" Sending command  : {:?}", command);
-        let response = notify_rx.recv_async().await.unwrap();
-        info!(" Sending response : {:?}", response);
+        let next_command = {
+            let mut lock = command_sequence.lock().await;
+            // lock.push_back(0x44); // Not sure what this does...
+            lock.pop_back()
+        };
+        match next_command {
+            Some(command) => {
+                command_tx.send_async(command).await.unwrap();
+                let _response = notify_rx.recv_async().await.unwrap();
+            }
+            None => {
+                tokio::time::sleep(Duration::from_secs(1)).await;
+            }
+        }
     }
 
     // Ok(())

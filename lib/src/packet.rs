@@ -1,4 +1,7 @@
+use std::fmt;
+
 use anyhow::{bail, Result};
+use log::{info, warn};
 
 #[derive(Debug, Default)]
 pub struct KingSongPacket {
@@ -6,8 +9,34 @@ pub struct KingSongPacket {
     pub command: u8,
 }
 
+impl fmt::Display for KingSongPacket {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        write!(f, "{:x?} -> {:x?}", self.command, self.data)
+    }
+}
+
 impl KingSongPacket {
-    pub fn from(data: [u8; 14], command: u8) -> Result<Self> {
+    pub fn from_raw(data: Vec<u8>) -> Result<Self> {
+        if data.len() != 20 {
+            warn!("Incorrect command length {:x?}", data);
+            bail!("Incorrect command length {:x?}", data);
+        }
+        if data[0] != 0xAA || data[1] != 0x55
+        // || data[17] != 0x14
+        // || data[18] != 0x5A
+        // || data[19] != 0x5A
+        {
+            warn!("Invalid packet header {:x?}", data);
+            bail!("Invalid packet header {:x?}", data);
+        }
+
+        Ok(KingSongPacket {
+            data: data[2..16].try_into()?,
+            command: data[16],
+        })
+    }
+
+    pub fn from(data: &[u8], command: u8) -> Result<Self> {
         // Protocol format
 
         //  2 bytes - hdr = header (0xAA55)
@@ -22,9 +51,13 @@ impl KingSongPacket {
         //
 
         if data.len() != 14 {
+            warn!("Incorrect command length {:x?}", data);
             bail!("Incorrect command length {:x?}", data);
         }
-        Ok(KingSongPacket { data, command })
+        Ok(KingSongPacket {
+            data: data.try_into()?,
+            command,
+        })
     }
 
     pub fn generate_command(self) -> Vec<u8> {
