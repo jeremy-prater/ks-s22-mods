@@ -22,6 +22,7 @@ pub enum BleEvent {
 
     // Vehicle status
     VSOCTempRide = 0xA9, // Voltage, Speed, Odometer, Current (DC Amps), Temp?, Ride Mode
+    SomeTemp = 0xF5, // Unknown temp? Maybe mobo, maybe motor?
 
     // Trip status
     DistTimeSpeedFan = 0xB9, // Trip Distance, Trip Time, Max Speed, Fan status

@@ -154,3 +154,50 @@ Payload
 | Sym  | Measurement    | Payload Bytes | Equation |
 |------|----------------|---------------|----------|
 | MN   | Model Name     |  0 - 14       |          |
+
+## f-series responses
+
+- These have a unique pattern
+
+```
+0:00:07.267815517 ::: s22_client [INFO] > S22 update : Unknown (f1) [e4, 2d, 0, 0, cd, 2, e8, 3, 0, 0, e8, 3, 45, f] [0, 5a, 5a]
+0:00:07.744693955 ::: s22_client [INFO] > S22 update : Unknown (f1) [8e, b, 90, b, 8d, b, 94, b, b0, b, 97, b, 9a, b] [1, 5a, 5a]
+0:00:08.244780675 ::: s22_client [INFO] > S22 update : Unknown (f1) [47, f, 45, f, 45, f, 47, f, 45, f, 45, f, 45, f] [2, 5a, 5a]
+0:00:08.724778386 ::: s22_client [INFO] > S22 update : Unknown (f1) [47, f, 47, f, 47, f, 47, f, 47, f, 48, f, 47, f] [3, 5a, 5a]
+0:00:09.204794472 ::: s22_client [INFO] > S22 update : Unknown (f1) [47, f, 52, f, 52, f, 52, f, 50, f, 52, f, 52, f] [4, 5a, 5a]
+0:00:09.684490307 ::: s22_client [INFO] > S22 update : Unknown (f1) [52, f, 52, f, 53, f, 52, f, 52, f, 53, f, 53, f] [5, 5a, 5a]
+0:00:10.168133585 ::: s22_client [INFO] > S22 update : Unknown (f1) [53, f, 50, f, 0, 0, 0, 0, 9b, b, 0, 0, 0, 0] [6, 5a, 5a]
+0:00:10.644826364 ::: s22_client [INFO] > S22 update : Unknown (f2) [cc, 2d, 0, 0, c4, 2, e8, 3, 0, 0, e8, 3, 4a, f] [0, 5a, 5a]
+0:00:11.148073652 ::: s22_client [INFO] > S22 update : Unknown (f2) [8a, b, 8e, b, 8c, b, 94, b, ad, b, 8f, b, 9b, b] [1, 5a, 5a]
+0:00:11.624728758 ::: s22_client [INFO] > S22 update : Unknown (f2) [48, f, 4a, f, 4a, f, 4a, f, 4a, f, 4a, f, 4a, f] [2, 5a, 5a]
+0:00:12.124710364 ::: s22_client [INFO] > S22 update : Unknown (f2) [4a, f, 4b, f, 48, f, 4a, f, 4b, f, 4a, f, 4a, f] [3, 5a, 5a]
+0:00:12.584865181 ::: s22_client [INFO] > S22 update : Unknown (f2) [4a, f, 3f, f, 3f, f, 3f, f, 3f, f, 3d, f, 3f, f] [4, 5a, 5a]
+0:00:13.064852313 ::: s22_client [INFO] > S22 update : Unknown (f2) [3f, f, 3f, f, 3d, f, 3f, f, 3d, f, 3f, f, 40, f] [5, 5a, 5a]
+0:00:13.548055900 ::: s22_client [INFO] > S22 update : Unknown (f2) [40, f, 3f, f, 0, 0, 0, 0, 9d, b, 0, 0, 0, 0] [6, 5a, 5a]
+0:00:14.044362414 ::: s22_client [INFO] > S22 update : Unknown (f3) [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0] [0, 5a, 5a]
+0:00:14.524643606 ::: s22_client [INFO] > S22 update : Unknown (f3) [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0] [1, 5a, 5a]
+0:00:15.004676490 ::: s22_client [INFO] > S22 update : Unknown (f3) [0, 0, 0, 0, 0, 0, 46, 10, 0, 0, 0, 0, 0, 0] [2, 5a, 5a]
+0:00:15.484759040 ::: s22_client [INFO] > S22 update : Unknown (f3) [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0] [3, 5a, 5a]
+0:00:15.964602234 ::: s22_client [INFO] > S22 update : Unknown (f4) [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0] [0, 5a, 5a]
+0:00:16.444690880 ::: s22_client [INFO] > S22 update : Unknown (f4) [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0] [1, 5a, 5a]
+0:00:16.944739642 ::: s22_client [INFO] > S22 update : Unknown (f4) [0, 0, 0, 0, 0, 0, 46, 10, 0, 0, 0, 0, 0, 0] [2, 5a, 5a]
+0:00:17.424829675 ::: s22_client [INFO] > S22 update : Unknown (f4) [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0] [3, 5a, 5a]
+0:00:17.904602938 ::: s22_client [INFO] > S22 update : Unknown (f1) [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0] [b0, 5a, 5a]
+0:00:18.384418965 ::: s22_client [INFO] > S22 update : Unknown (f2) [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0] [b0, 5a, 5a]
+```
+
+### f1 and f2 are full of data
+
+
+- f1 : iterates through [0..6]
+- f2 : iterates through [0..6]
+
+### f3 and f4 are identical with only a 0x46 and a 0x10 
+
+- f3 : iterates through [0..3]
+- f4 : iterates through [0..3] 
+
+### f1 and f2 send a b0 series
+
+- f1 : re-iterates through [b0] : All 0's
+- f2 : re-iterates through [b0] : All 0's
