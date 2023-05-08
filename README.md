@@ -197,6 +197,12 @@ Payload
 - f3 : iterates through [0..3]
 - f4 : iterates through [0..3] 
 
+### f5 appears to just have one entry which might be a temp
+
+```
+0:00:04.054097613 ::: s22_client [INFO] > S22 update : Unknown (f5) [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 22, 0] [14, 5a, 5a]
+```
+
 ### f1 and f2 send a b0 series
 
 - f1 : re-iterates through [b0] : All 0's
