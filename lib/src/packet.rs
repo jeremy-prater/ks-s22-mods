@@ -1,6 +1,6 @@
 use crate::ble::BleEvent;
 use anyhow::{bail, Result};
-use log::{info, warn};
+use log::{warn};
 use std::fmt;
 
 #[derive(Debug, Default, PartialEq, Eq, Clone)]

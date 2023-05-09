@@ -1,6 +1,5 @@
-#[macro_use]
-extern crate num_derive;
 extern crate num;
+extern crate num_derive;
 
 use anyhow::Result;
 use bluer::{gatt::remote::Service, Adapter, Device};
@@ -8,7 +7,7 @@ use futures::{pin_mut, StreamExt};
 use log::{info, warn};
 use s22_library::ble::BleEvent;
 use s22_library::packet::KingSongPacket;
-use std::cmp::Ordering;
+
 use std::collections::{HashMap, VecDeque};
 use std::sync::Arc;
 use std::time::Duration;
@@ -48,11 +47,10 @@ async fn main() -> Result<()> {
                 info!("Found KS Read characteristic");
 
                 for descriptor in characteristic.descriptors().await? {
-                    match descriptor.uuid().await.unwrap() {
-                        s22_library::ble::KS_CHARACTERISTIC_CONFIG_UUID => {
-                            info!("Found KS client config characteristic");
-                        }
-                        _ => {}
+                    if descriptor.uuid().await.unwrap()
+                        == s22_library::ble::KS_CHARACTERISTIC_CONFIG_UUID
+                    {
+                        info!("Found KS client config characteristic");
                     }
 
                     let notify_characteristic = characteristic.clone();
@@ -113,7 +111,7 @@ async fn main() -> Result<()> {
     }
 
     // Follow command sequence from darkness bot...? Ehh ok
-    let mut command_sequence: Arc<Mutex<VecDeque<s22_library::packet::KingSongPacket>>> =
+    let command_sequence: Arc<Mutex<VecDeque<s22_library::packet::KingSongPacket>>> =
         Arc::new(Mutex::new(VecDeque::new()));
     {
         let mut lock = command_sequence.lock().await;

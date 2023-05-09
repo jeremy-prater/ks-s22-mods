@@ -1,4 +1,4 @@
-use std::fmt;
+
 
 // Service UUID for GATT example.
 pub const KS_SERVICE_UUID: uuid::Uuid = uuid::Uuid::from_u128(0x0000ffe000001000800000805f9b34fb);
