@@ -207,6 +207,52 @@ Payload
 - f1 : re-iterates through [b0] : All 0's
 - f2 : re-iterates through [b0] : All 0's
 
-### Firmware Download
+## Firmware Download
 
-wget https://www.kingsong.vip/upload/firmware/2023/02/01/2023-02-01-03-20-46.bin
+https://www.kingsong.vip/upload/firmware/2023/02/01/2023-02-01-03-20-46.bin
+
+## Mainboard
+
+### SWD
+
+The SWD header is unpopulated, but is connected directly to GND, +3.3V, SWDIO, and SWDCLK
+
+Using OpenOCD with a raspberry-pi 4 I was able to download the firmware
+
+
+## Mainboard peripheral assignment
+
+### USART0 - Connects to the BC-204 BLE Chip
+
+- 115200 baud rate
+- Connects to DMA0 CH 3 Tx
+- Connects to DMA0 CH 4 Rx
+
+### USART2 - BMS 2
+
+- Connects to DMA0 CH 1 Tx
+- Connects to DMA0 CH 2 Rx
+
+### USART3 - BMS 1
+
+- Connects to DMA1 CH 4 Tx
+- Connects to DMA1 CH 2 Rx
+
+### SPI0 - ?? Probably the accelerometer
+
+CS - GPIO A4
+
+### SPI2 - Connects to 8 MB flash chip
+
+- Unsure of contents, possibly user settings (tiltback, alarms, odometer, etc...)
+
+### ADC0 - ??
+### ADC1 - ??
+
+### Timer 0 - ??
+### Timer 1 - ??
+### Timer 2 - ??
+### Timer 3 - ??
+### Timer 4 - ??
+
+### GPIO - ??
