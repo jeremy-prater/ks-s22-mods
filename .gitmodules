@@ -1,0 +1,6 @@
+[submodule "s22_display/esp-idf"]
+	path = s22_display/esp-idf
+	url = https://github.com/espressif/esp-idf.git
+[submodule "s22_display/esp-idf-lib"]
+	path = s22_display/esp-idf-lib
+	url = git@github.com:jeremy-prater/esp-idf-lib.git
