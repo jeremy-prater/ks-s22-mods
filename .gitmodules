@@ -4,3 +4,6 @@
 [submodule "s22_display/esp-idf-lib"]
 	path = s22_display/esp-idf-lib
 	url = git@github.com:jeremy-prater/esp-idf-lib.git
+[submodule "s22_display/esp32-st7789-demo"]
+	path = s22_display/esp32-st7789-demo
+	url = https://github.com/mireq/esp32-st7789-demo.git

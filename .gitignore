@@ -1,3 +1,4 @@
 ble_tool/target
 s22_display/build
+s22_display/esp32-st7789-demo/build
 .vscode
