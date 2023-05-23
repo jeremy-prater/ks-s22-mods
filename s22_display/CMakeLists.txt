@@ -7,9 +7,7 @@ cmake_minimum_required(VERSION 3.16)
 set(ESP_LIB_DIR ${CMAKE_SOURCE_DIR}/esp-idf-lib/components)
 message(${ESP_LIB_DIR})
 
-set(ST7789_LIB_DIR ${CMAKE_SOURCE_DIR}/esp32-st7789-demo/components)
-message(${ST7789_LIB_DIR})
-set(EXTRA_COMPONENT_DIRS ${ESP_LIB_DIR} ${ST7789_LIB_DIR})
+set(EXTRA_COMPONENT_DIRS ${ESP_LIB_DIR})
 
 include($ENV{IDF_PATH}/tools/cmake/project.cmake)
 project(s22_display)
