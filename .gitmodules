@@ -4,6 +4,9 @@
 [submodule "s22_display/esp-idf-lib"]
 	path = s22_display/esp-idf-lib
 	url = git@github.com:jeremy-prater/esp-idf-lib.git
-[submodule "s22_display/esp32-st7789-demo"]
-	path = s22_display/esp32-st7789-demo
-	url = https://github.com/mireq/esp32-st7789-demo.git
+[submodule "s22_display/components/lvgl"]
+	path = s22_display/components/lvgl
+	url = https://github.com/lvgl/lvgl.git
+[submodule "s22_display/components/lvgl_esp32_drivers"]
+	path = s22_display/components/lvgl_esp32_drivers
+	url = https://github.com/lvgl/lvgl_esp32_drivers.git
