@@ -8,9 +8,15 @@
 
 ///////////////////// VARIABLES ////////////////////
 
-// SCREEN: ui_Screen1
-void ui_Screen1_screen_init(void);
-lv_obj_t *ui_Screen1;
+// SCREEN: ui_BootConnect
+void ui_BootConnect_screen_init(void);
+lv_obj_t *ui_BootConnect;
+lv_obj_t *ui_kslogo;
+lv_obj_t *ui_Label2;
+
+// SCREEN: ui_Riding
+void ui_Riding_screen_init(void);
+lv_obj_t *ui_Riding;
 lv_obj_t *ui_SpeedMeter;
 lv_obj_t *ui_PWMMeter;
 lv_obj_t *ui_SpeedValue;
@@ -22,9 +28,22 @@ lv_obj_t *ui_BatteryIcon;
 lv_obj_t *ui_TempIcon;
 lv_obj_t *ui_TempValue;
 lv_obj_t *ui_CurrentIcon;
-lv_obj_t *ui_VoltIcon;
 lv_obj_t *ui_CurrentValue;
+lv_obj_t *ui_VoltIcon;
 lv_obj_t *ui_VoltLabel;
+
+// SCREEN: ui_Charging
+void ui_Charging_screen_init(void);
+lv_obj_t *ui_Charging;
+lv_obj_t *ui_ChgBatteryGraph;
+lv_obj_t *ui_ChgBatteryIcon;
+lv_obj_t *ui_ChgTempValue;
+lv_obj_t *ui_ChgCurrentIcon;
+lv_obj_t *ui_ChgVoltageIcon;
+lv_obj_t *ui_ChgTempIcon;
+lv_obj_t *ui_ChgVoltageValue;
+lv_obj_t *ui_ChgCurrentValue;
+lv_obj_t *ui_ChgBatteryValue;
 lv_obj_t *ui____initial_actions0;
 
 ///////////////////// TEST LVGL SETTINGS ////////////////////
@@ -46,7 +65,9 @@ void ui_init( void )
 lv_disp_t *dispp = lv_disp_get_default();
 lv_theme_t *theme = lv_theme_default_init(dispp, lv_palette_main(LV_PALETTE_BLUE), lv_palette_main(LV_PALETTE_RED), true, LV_FONT_DEFAULT);
 lv_disp_set_theme(dispp, theme);
-ui_Screen1_screen_init();
+ui_BootConnect_screen_init();
+ui_Riding_screen_init();
+ui_Charging_screen_init();
 ui____initial_actions0 = lv_obj_create(NULL);
-lv_disp_load_scr( ui_Screen1);
+lv_disp_load_scr( ui_BootConnect);
 }

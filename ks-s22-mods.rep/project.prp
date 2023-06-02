@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <FILE_INFO>
     <BASIC_INFO>
-        <STATE NAME="OWNER" TYPE="string" VALUE="prater" />
-        <STATE NAME="SERVER" TYPE="string" VALUE="prater-server-2.lan" />
+        <STATE NAME="OWNER" TYPE="string" VALUE="jeremy.prater" />
+        <STATE NAME="SERVER" TYPE="string" VALUE="172.20.0.21" />
         <STATE NAME="REPOSITORY_NAME" TYPE="string" VALUE="ks-s22-mods" />
         <STATE NAME="PORT_NUMBER" TYPE="int" VALUE="13100" />
     </BASIC_INFO>

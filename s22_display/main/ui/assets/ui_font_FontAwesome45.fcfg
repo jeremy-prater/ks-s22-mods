@@ -1,0 +1,19 @@
+{
+  "codename": "FontAwesome45",
+  "ttf_path": "/assets/fa-solid-900.ttf",
+  "bin_path": "/assets/ui_font_FontAwesome45.bin",
+  "c_path": "/assets/ui_font_FontAwesome45.c",
+  "cfg_path": "/assets/ui_font_FontAwesome45.fcfg",
+  "size": 45,
+  "bpp": 2,
+  "letters": 0,
+  "ranges": [
+    "0xf241",
+    "   0xf2c9",
+    "  0xf0e7",
+    "  0xf1e6"
+  ],
+  "symbols": "",
+  "customparams": "--no-compress --no-prefilter",
+  "uploaded": false
+}

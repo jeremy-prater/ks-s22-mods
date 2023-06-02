@@ -14,9 +14,14 @@ extern "C" {
 
 #include "ui_helpers.h"
 #include "ui_events.h"
-// SCREEN: ui_Screen1
-void ui_Screen1_screen_init(void);
-extern lv_obj_t *ui_Screen1;
+// SCREEN: ui_BootConnect
+void ui_BootConnect_screen_init(void);
+extern lv_obj_t *ui_BootConnect;
+extern lv_obj_t *ui_kslogo;
+extern lv_obj_t *ui_Label2;
+// SCREEN: ui_Riding
+void ui_Riding_screen_init(void);
+extern lv_obj_t *ui_Riding;
 extern lv_obj_t *ui_SpeedMeter;
 extern lv_obj_t *ui_PWMMeter;
 extern lv_obj_t *ui_SpeedValue;
@@ -28,13 +33,29 @@ extern lv_obj_t *ui_BatteryIcon;
 extern lv_obj_t *ui_TempIcon;
 extern lv_obj_t *ui_TempValue;
 extern lv_obj_t *ui_CurrentIcon;
-extern lv_obj_t *ui_VoltIcon;
 extern lv_obj_t *ui_CurrentValue;
+extern lv_obj_t *ui_VoltIcon;
 extern lv_obj_t *ui_VoltLabel;
+// SCREEN: ui_Charging
+void ui_Charging_screen_init(void);
+extern lv_obj_t *ui_Charging;
+extern lv_obj_t *ui_ChgBatteryGraph;
+extern lv_obj_t *ui_ChgBatteryIcon;
+extern lv_obj_t *ui_ChgTempValue;
+extern lv_obj_t *ui_ChgCurrentIcon;
+extern lv_obj_t *ui_ChgVoltageIcon;
+extern lv_obj_t *ui_ChgTempIcon;
+extern lv_obj_t *ui_ChgVoltageValue;
+extern lv_obj_t *ui_ChgCurrentValue;
+extern lv_obj_t *ui_ChgBatteryValue;
 extern lv_obj_t *ui____initial_actions0;
+
+LV_IMG_DECLARE( ui_img_bg_png);   // assets/bg.png
+LV_IMG_DECLARE( ui_img_ks_logo_png);   // assets/ks_logo.png
 
 LV_FONT_DECLARE( ui_font_Arcade100);
 LV_FONT_DECLARE( ui_font_FontAwesome35);
+LV_FONT_DECLARE( ui_font_FontAwesome45);
 
 void ui_init(void);
 
