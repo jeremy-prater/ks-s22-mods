@@ -13,11 +13,14 @@ SET(UI_SOURCES
 )
 
 SET(BLE_CLIENT_SOURCES
-    ble_client/ble_client.c
+    ble/ble.c
+    ble/client.c
+    ble/utils/peer.c
+    ble/utils/misc.c
 )
 
 idf_component_register(
     SRCS s22_display.c ${UI_SOURCES} ${BLE_CLIENT_SOURCES}
     INCLUDE_DIRS .
-    REQUIRES lvgl lvgl_esp32_drivers driver esp_hid
+    REQUIRES lvgl lvgl_esp32_drivers driver nvs_flash bt
 )

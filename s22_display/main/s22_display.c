@@ -20,6 +20,7 @@
 #include "esp_system.h"
 #include "esp_timer.h"
 #include "driver/gpio.h"
+#include "nvs_flash.h"
 
 #include "lvgl.h"
 #include "lvgl_helpers.h"
@@ -30,6 +31,8 @@
 #include "ui/ui.h"
 #endif
 
+#include "ble/ble.h"
+
 #define TAG "s22-main"
 #define LV_TICK_PERIOD_MS 1
 
@@ -39,6 +42,14 @@ static void create_ui_application(void);
 
 void app_main()
 {
+    esp_err_t ret = nvs_flash_init();
+    if  (ret == ESP_ERR_NVS_NO_FREE_PAGES || ret == ESP_ERR_NVS_NEW_VERSION_FOUND) {
+        ESP_ERROR_CHECK(nvs_flash_erase());
+        ret = nvs_flash_init();
+    }
+    ESP_ERROR_CHECK(ret);
+
+    init_ble();
 
     /* If you want to use a task to create the graphic, you NEED to create a Pinned task
      * Otherwise there can be problem such as memory corruption and so on.
