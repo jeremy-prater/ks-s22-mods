@@ -16,9 +16,11 @@ extern "C" {
 #include "ui_events.h"
 // SCREEN: ui_BootConnect
 void ui_BootConnect_screen_init(void);
+void ui_event_BootConnect( lv_event_t * e);
 extern lv_obj_t *ui_BootConnect;
 extern lv_obj_t *ui_kslogo;
-extern lv_obj_t *ui_Label2;
+extern lv_obj_t *ui_ConnectingLabel;
+extern lv_obj_t *ui_ConnectingBLEName;
 // SCREEN: ui_Riding
 void ui_Riding_screen_init(void);
 extern lv_obj_t *ui_Riding;

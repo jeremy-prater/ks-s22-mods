@@ -4,6 +4,7 @@ SET(UI_SOURCES
     ui/screens/ui_Charging.c
     ui/ui.c
     ui/ui_helpers.c
+    ui/ui_events.c
     ui/images/ui_img_bg_png.c
     ui/images/ui_img_ks_logo_png.c
     ui/fonts/ui_font_Arcade100.c
@@ -11,8 +12,12 @@ SET(UI_SOURCES
     ui/fonts/ui_font_FontAwesome45.c
 )
 
+SET(BLE_CLIENT_SOURCES
+    ble_client/ble_client.c
+)
+
 idf_component_register(
-    SRCS s22_display.c ${UI_SOURCES}
+    SRCS s22_display.c ${UI_SOURCES} ${BLE_CLIENT_SOURCES}
     INCLUDE_DIRS .
-    REQUIRES lvgl lvgl_esp32_drivers driver
+    REQUIRES lvgl lvgl_esp32_drivers driver esp_hid
 )

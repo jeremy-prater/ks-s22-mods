@@ -10,9 +10,11 @@
 
 // SCREEN: ui_BootConnect
 void ui_BootConnect_screen_init(void);
+void ui_event_BootConnect( lv_event_t * e);
 lv_obj_t *ui_BootConnect;
 lv_obj_t *ui_kslogo;
-lv_obj_t *ui_Label2;
+lv_obj_t *ui_ConnectingLabel;
+lv_obj_t *ui_ConnectingBLEName;
 
 // SCREEN: ui_Riding
 void ui_Riding_screen_init(void);
@@ -57,6 +59,12 @@ lv_obj_t *ui____initial_actions0;
 ///////////////////// ANIMATIONS ////////////////////
 
 ///////////////////// FUNCTIONS ////////////////////
+void ui_event_BootConnect( lv_event_t * e) {
+    lv_event_code_t event_code = lv_event_get_code(e);lv_obj_t * target = lv_event_get_target(e);
+if ( event_code == LV_EVENT_SCREEN_LOADED) {
+      OnBootConnectLoaded( e );
+}
+}
 
 ///////////////////// SCREENS ////////////////////
 

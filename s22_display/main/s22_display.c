@@ -97,7 +97,7 @@ static void guiTask(void *pvParameter)
         .name = "periodic_gui"};
     esp_timer_handle_t periodic_timer;
     ESP_ERROR_CHECK(esp_timer_create(&periodic_timer_args, &periodic_timer));
-    ESP_ERROR_CHECK(esp_timer_start_periodic(periodic_timer, LV_TICK_PERIOD_MS * 1000));
+    ESP_ERROR_CHECK(esp_timer_start_periodic(periodic_timer, LV_TICK_PERIOD_MS * 16));
 
     /* Create the demo application */
 #if LV_USE_DEMO_WIDGETS
@@ -140,18 +140,6 @@ static void btn_event_cb(lv_obj_t *btn, lv_event_t event)
 
 static void create_ui_application(void)
 {
-    // lv_obj_t *btn = lv_btn_create(lv_scr_act()); /*Add a button the current screen*/
-    // lv_obj_set_pos(btn, 10, 10);                 /*Set its position*/
-    // lv_obj_set_size(btn, 120, 50);               /*Set its size*/
-    // // lv_obj_set_event_cb(btn, btn_event_cb);                 /*Assign a callback to the button*/
-    // lv_obj_t *label = lv_label_create(btn); /*Add a label to the button*/
-    // lv_label_set_text(label, "Yeah");       /*Set the labels text*/
-
-    // lv_obj_t *btn2 = lv_btn_create(lv_scr_act()); /*Add a button the current screen*/
-    // lv_obj_set_pos(btn2, 150, 10);                /*Set its position*/
-    // lv_obj_set_size(btn2, 120, 50);               /*Set its size*/
-    // lv_obj_t *label2 = lv_label_create(btn2);     /*Add a label to the button*/
-    // lv_label_set_text(label2, "Buddy");           /*Set the labels text*/
     ui_init();
 }
 

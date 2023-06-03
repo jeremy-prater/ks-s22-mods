@@ -17,18 +17,29 @@ lv_img_set_src(ui_kslogo, &ui_img_ks_logo_png);
 lv_obj_set_width( ui_kslogo, LV_SIZE_CONTENT);  /// 199
 lv_obj_set_height( ui_kslogo, LV_SIZE_CONTENT);   /// 76
 lv_obj_set_x( ui_kslogo, 0 );
-lv_obj_set_y( ui_kslogo, -20 );
+lv_obj_set_y( ui_kslogo, -35 );
 lv_obj_set_align( ui_kslogo, LV_ALIGN_CENTER );
 lv_obj_add_flag( ui_kslogo, LV_OBJ_FLAG_ADV_HITTEST );   /// Flags
 lv_obj_clear_flag( ui_kslogo, LV_OBJ_FLAG_SCROLLABLE );    /// Flags
 
-ui_Label2 = lv_label_create(ui_BootConnect);
-lv_obj_set_width( ui_Label2, LV_SIZE_CONTENT);  /// 1
-lv_obj_set_height( ui_Label2, LV_SIZE_CONTENT);   /// 1
-lv_obj_set_x( ui_Label2, 0 );
-lv_obj_set_y( ui_Label2, 80 );
-lv_obj_set_align( ui_Label2, LV_ALIGN_CENTER );
-lv_label_set_text(ui_Label2,"Connecting to wheel");
-lv_obj_set_style_text_font(ui_Label2, &lv_font_montserrat_26, LV_PART_MAIN| LV_STATE_DEFAULT);
+ui_ConnectingLabel = lv_label_create(ui_BootConnect);
+lv_obj_set_width( ui_ConnectingLabel, LV_SIZE_CONTENT);  /// 1
+lv_obj_set_height( ui_ConnectingLabel, LV_SIZE_CONTENT);   /// 1
+lv_obj_set_x( ui_ConnectingLabel, 0 );
+lv_obj_set_y( ui_ConnectingLabel, 60 );
+lv_obj_set_align( ui_ConnectingLabel, LV_ALIGN_CENTER );
+lv_label_set_text(ui_ConnectingLabel,"Connecting to wheel");
+lv_obj_set_style_text_font(ui_ConnectingLabel, &lv_font_montserrat_26, LV_PART_MAIN| LV_STATE_DEFAULT);
+
+ui_ConnectingBLEName = lv_label_create(ui_BootConnect);
+lv_obj_set_width( ui_ConnectingBLEName, LV_SIZE_CONTENT);  /// 1
+lv_obj_set_height( ui_ConnectingBLEName, LV_SIZE_CONTENT);   /// 1
+lv_obj_set_x( ui_ConnectingBLEName, 0 );
+lv_obj_set_y( ui_ConnectingBLEName, 95 );
+lv_obj_set_align( ui_ConnectingBLEName, LV_ALIGN_CENTER );
+lv_label_set_text(ui_ConnectingBLEName,"KSN-S22-xxxxx");
+lv_obj_set_style_text_font(ui_ConnectingBLEName, &lv_font_montserrat_26, LV_PART_MAIN| LV_STATE_DEFAULT);
+
+lv_obj_add_event_cb(ui_BootConnect, ui_event_BootConnect, LV_EVENT_ALL, NULL);
 
 }
