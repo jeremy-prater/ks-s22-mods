@@ -6,17 +6,47 @@
 #include "host/util/util.h"
 #include "ble/utils/utils.h"
 #include "ble/client.h"
+#include "s22_display.h"
+#include "s22_model.h"
+#include "ui/ui.h"
 
 #define PEER_ADDR_VAL_SIZE 6
 
-#define TAG = "ble:client";
+#define TAG "ble:client"
+
+const ble_addr_t s22_addr = {
+    .type = BLE_ADDR_PUBLIC,
+    .val = {
+        0x13,
+        0x71,
+        0xDA,
+        0x7D,
+        0x1A,
+        0x00
+        // 0xC2,0xC5,0xC3,0x01,0xF1,0x76
+    }};
 
 static int ble_s22_client_gap_event(struct ble_gap_event *event, void *arg);
 QueueHandle_t spp_common_uart_queue = NULL;
 
 uint16_t attribute_handle[CONFIG_BT_NIMBLE_MAX_CONNECTIONS + 1];
-static void ble_s22_client_scan(void);
 static ble_addr_t connected_addr[CONFIG_BT_NIMBLE_MAX_CONNECTIONS + 1];
+
+static void goto_riding_screen()
+{
+    lv_event_t event;
+    event.code = LV_EVENT_READY;
+    ui_event_BootConnect(&event);
+    set_speed(20);
+    set_pwm(20);
+}
+
+static void goto_connect_screen()
+{
+    lv_event_t event;
+    event.code = LV_EVENT_CANCEL;
+    ui_event_BootConnect(&event);
+}
 
 static void
 ble_s22_client_set_handle(const struct peer *peer)
@@ -26,6 +56,12 @@ ble_s22_client_set_handle(const struct peer *peer)
                              BLE_UUID16_DECLARE(GATT_SPP_SVC_UUID),
                              BLE_UUID16_DECLARE(GATT_SPP_CHR_UUID));
     attribute_handle[peer->conn_handle] = chr->chr.val_handle;
+
+    char ble_uuid_str[BLE_UUID_STR_LEN];
+    ble_uuid_to_str(&chr->chr.uuid, ble_uuid_str);
+    ESP_LOGI(TAG, "Found characteristic UUID : %s with handle %d", ble_uuid_str, peer->conn_handle);
+
+    goto_riding_screen();
 }
 
 /**
@@ -52,6 +88,13 @@ ble_s22_client_on_disc_complete(const struct peer *peer, int status, void *arg)
                       "conn_handle=%d\n",
                 status, peer->conn_handle);
 
+    struct peer_svc *svc;
+    struct peer_chr *chr;
+
+    // SLIST_FOREACH(svc, &peer->svcs, next) {
+    //     SLIST_FOREACH(chr, &svc->chrs, next) {
+    //     }
+    // }
     ble_s22_client_set_handle(peer);
 #if CONFIG_BT_NIMBLE_MAX_CONNECTIONS > 1
     ble_s22_client_scan();
@@ -61,9 +104,9 @@ ble_s22_client_on_disc_complete(const struct peer *peer, int status, void *arg)
 /**
  * Initiates the GAP general discovery procedure.
  */
-static void
-ble_s22_client_scan(void)
+void ble_s22_client_scan(void)
 {
+    ESP_LOGI(TAG, "Starting scan");
     uint8_t own_addr_type;
     struct ble_gap_disc_params disc_params;
     int rc;
@@ -76,18 +119,14 @@ ble_s22_client_scan(void)
         return;
     }
 
-    /* Tell the controller to filter duplicates; we don't want to process
-     * repeated advertisements from the same device.
-     */
+    // Tell the controller to filter duplicates; we don't want to process
+    // repeated advertisements from the same device.
     disc_params.filter_duplicates = 1;
 
-    /**
-     * Perform a passive scan.  I.e., don't send follow-up scan requests to
-     * each advertiser.
-     */
-    disc_params.passive = 1;
+    // Do an active BLE scan where we discover names/attributes
+    disc_params.passive = 0;
 
-    /* Use defaults for the rest of the parameters. */
+    // Use defaults for the rest of the parameters.
     disc_params.itvl = 0;
     disc_params.window = 0;
     disc_params.filter_policy = 0;
@@ -114,6 +153,21 @@ ble_s22_client_should_connect(const struct ble_gap_disc_desc *disc)
     int rc;
     int i;
 
+    rc = ble_addr_cmp(&disc->addr, (const ble_addr_t *)&s22_addr);
+    if (rc != 0)
+    {
+        return 0;
+    }
+    ESP_LOGI(TAG, "addr_type=%d addr=%02x:%02x:%02x:%02x:%02x:%02x -> %d",
+             disc->addr.type,
+             disc->addr.val[5],
+             disc->addr.val[4],
+             disc->addr.val[3],
+             disc->addr.val[2],
+             disc->addr.val[1],
+             disc->addr.val[0],
+             rc);
+
     /* Check if device is already connected or not */
     for (i = 0; i <= CONFIG_BT_NIMBLE_MAX_CONNECTIONS; i++)
     {
@@ -128,26 +182,39 @@ ble_s22_client_should_connect(const struct ble_gap_disc_desc *disc)
     if (disc->event_type != BLE_HCI_ADV_RPT_EVTYPE_ADV_IND &&
         disc->event_type != BLE_HCI_ADV_RPT_EVTYPE_DIR_IND)
     {
-
-        return 0;
+        // ESP_LOGW(TAG, "unknown scan type : %d", disc->event_type);
+        // return 0;
     }
 
     rc = ble_hs_adv_parse_fields(&fields, disc->data, disc->length_data);
     if (rc != 0)
     {
-        return rc;
+        ESP_LOGW(TAG, "ble_hs_adv_parse_fields failed : %d", rc);
     }
 
-    /* The device has to advertise support for the SPP
-     * service (0xABF0).
-     */
-    for (i = 0; i < fields.num_uuids16; i++)
+    if (fields.name != NULL && fields.name_is_complete != 0)
     {
-        if (ble_uuid_u16(&fields.uuids16[i].u) == GATT_SPP_SVC_UUID)
-        {
-            return 1;
-        }
+        char *name = malloc(fields.name_len + 1);
+        strncpy(name, (const char *)fields.name, fields.name_len);
+        name[fields.name_len] = 0x00;
+        ESP_LOGI(TAG, "Found BLE : %s", name);
+        size_t len = strnlen(name, strlen(KS_S22_BLE_NAME));
+        int match = strncmp(name, KS_S22_BLE_NAME, len);
+        free(name);
+        return match == 0;
     }
+
+    // ESP_LOGI(TAG, "uuid count : 128-bit %d : 32-bit %d : 16-bit %d", fields.num_uuids128, fields.num_uuids32, fields.num_uuids16);
+
+    // for (i = 0; i < fields.num_uuids16; i++)
+    // {
+    //     uint16_t uuid = ble_uuid_u16(&fields.uuids16[i].u);
+    //     ESP_LOGI(TAG, "UUID %08x %08x", uuid, GATT_SPP_SVC_UUID);
+    //     if (uuid == GATT_SPP_SVC_UUID)
+    //     {
+    //         return 1;
+    //     }
+    // }
     return 0;
 }
 
@@ -227,7 +294,14 @@ ble_s22_client_gap_event(struct ble_gap_event *event, void *arg)
                                      event->disc.length_data);
         if (rc != 0)
         {
-            return 0;
+            ESP_LOGW(TAG, "Failed to parse advertisement fields : %02X:%02X:%02X:%02X:%02X:%02X",
+                     event->disc.addr.val[5],
+                     event->disc.addr.val[4],
+                     event->disc.addr.val[3],
+                     event->disc.addr.val[2],
+                     event->disc.addr.val[1],
+                     event->disc.addr.val[0]);
+            // return 0;
         }
 
         /* An advertisment report was received during GAP discovery. */
@@ -273,6 +347,7 @@ ble_s22_client_gap_event(struct ble_gap_event *event, void *arg)
             MODLOG_DFLT(ERROR, "Error: Connection failed; status=%d\n",
                         event->connect.status);
             ble_s22_client_scan();
+            goto_connect_screen();
         }
 
         return 0;
@@ -290,6 +365,8 @@ ble_s22_client_gap_event(struct ble_gap_event *event, void *arg)
 
         /* Resume scanning. */
         ble_s22_client_scan();
+        goto_connect_screen();
+
         return 0;
 
     case BLE_GAP_EVENT_DISC_COMPLETE:
@@ -334,9 +411,6 @@ void ble_s22_client_on_sync(void)
     /* Make sure we have proper identity address set (public preferred) */
     rc = ble_hs_util_ensure_addr(0);
     assert(rc == 0);
-
-    /* Begin scanning for a peripheral to connect to. */
-    ble_s22_client_scan();
 }
 
 // void ble_client_uart_task(void *pvParameters)

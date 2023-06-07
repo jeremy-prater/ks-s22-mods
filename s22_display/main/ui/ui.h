@@ -21,6 +21,9 @@ extern lv_obj_t *ui_BootConnect;
 extern lv_obj_t *ui_kslogo;
 extern lv_obj_t *ui_ConnectingLabel;
 extern lv_obj_t *ui_ConnectingBLEName;
+extern lv_obj_t *ui_ConnectErrorPanel;
+extern lv_obj_t *ui_ConnectBLEErrorTitle;
+extern lv_obj_t *ui_ConnectBLEErrorDescription;
 // SCREEN: ui_Riding
 void ui_Riding_screen_init(void);
 extern lv_obj_t *ui_Riding;

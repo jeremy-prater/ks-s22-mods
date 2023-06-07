@@ -19,8 +19,13 @@ SET(BLE_CLIENT_SOURCES
     ble/utils/misc.c
 )
 
+SET(SOURCES
+    s22_display.c
+    s22_model.c
+)
+
 idf_component_register(
-    SRCS s22_display.c ${UI_SOURCES} ${BLE_CLIENT_SOURCES}
+    SRCS ${SOURCES} ${UI_SOURCES} ${BLE_CLIENT_SOURCES}
     INCLUDE_DIRS .
     REQUIRES lvgl lvgl_esp32_drivers driver nvs_flash bt
 )

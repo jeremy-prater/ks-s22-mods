@@ -40,15 +40,16 @@ lv_obj_set_height( ui_PWMMeter, 320);
 lv_obj_set_x( ui_PWMMeter, 0 );
 lv_obj_set_y( ui_PWMMeter, 40 );
 lv_obj_set_align( ui_PWMMeter, LV_ALIGN_CENTER );
-lv_arc_set_value(ui_PWMMeter, 88);
+lv_arc_set_value(ui_PWMMeter, 22);
 lv_arc_set_bg_angles(ui_PWMMeter,270,0);
-lv_arc_set_mode(ui_PWMMeter, LV_ARC_MODE_REVERSE);
+lv_obj_set_style_arc_color(ui_PWMMeter, lv_color_hex(0xFF8940), LV_PART_MAIN | LV_STATE_DEFAULT );
+lv_obj_set_style_arc_opa(ui_PWMMeter, 255, LV_PART_MAIN| LV_STATE_DEFAULT);
 lv_obj_set_style_arc_width(ui_PWMMeter, 30, LV_PART_MAIN| LV_STATE_DEFAULT);
 lv_obj_set_style_arc_rounded(ui_PWMMeter, false, LV_PART_MAIN| LV_STATE_DEFAULT);
 
 lv_obj_set_style_outline_color(ui_PWMMeter, lv_color_hex(0xFF0000), LV_PART_INDICATOR | LV_STATE_DEFAULT );
 lv_obj_set_style_outline_opa(ui_PWMMeter, 255, LV_PART_INDICATOR| LV_STATE_DEFAULT);
-lv_obj_set_style_arc_color(ui_PWMMeter, lv_color_hex(0xFF8940), LV_PART_INDICATOR | LV_STATE_DEFAULT );
+lv_obj_set_style_arc_color(ui_PWMMeter, lv_color_hex(0x293031), LV_PART_INDICATOR | LV_STATE_DEFAULT );
 lv_obj_set_style_arc_opa(ui_PWMMeter, 255, LV_PART_INDICATOR| LV_STATE_DEFAULT);
 lv_obj_set_style_arc_width(ui_PWMMeter, 30, LV_PART_INDICATOR| LV_STATE_DEFAULT);
 lv_obj_set_style_arc_rounded(ui_PWMMeter, false, LV_PART_INDICATOR| LV_STATE_DEFAULT);
@@ -135,7 +136,7 @@ lv_obj_set_style_text_font(ui_TempValue, &lv_font_montserrat_24, LV_PART_MAIN| L
 ui_CurrentIcon = lv_label_create(ui_Riding);
 lv_obj_set_width( ui_CurrentIcon, LV_SIZE_CONTENT);  /// 1
 lv_obj_set_height( ui_CurrentIcon, LV_SIZE_CONTENT);   /// 1
-lv_obj_set_x( ui_CurrentIcon, -45 );
+lv_obj_set_x( ui_CurrentIcon, 45 );
 lv_obj_set_y( ui_CurrentIcon, 70 );
 lv_obj_set_align( ui_CurrentIcon, LV_ALIGN_CENTER );
 lv_label_set_text(ui_CurrentIcon,"");
@@ -146,7 +147,7 @@ lv_obj_set_style_text_font(ui_CurrentIcon, &ui_font_FontAwesome35, LV_PART_MAIN|
 ui_CurrentValue = lv_label_create(ui_Riding);
 lv_obj_set_width( ui_CurrentValue, LV_SIZE_CONTENT);  /// 1
 lv_obj_set_height( ui_CurrentValue, LV_SIZE_CONTENT);   /// 1
-lv_obj_set_x( ui_CurrentValue, -45 );
+lv_obj_set_x( ui_CurrentValue, 45 );
 lv_obj_set_y( ui_CurrentValue, 105 );
 lv_obj_set_align( ui_CurrentValue, LV_ALIGN_CENTER );
 lv_label_set_text(ui_CurrentValue,"20A");
@@ -155,7 +156,7 @@ lv_obj_set_style_text_font(ui_CurrentValue, &lv_font_montserrat_24, LV_PART_MAIN
 ui_VoltIcon = lv_label_create(ui_Riding);
 lv_obj_set_width( ui_VoltIcon, LV_SIZE_CONTENT);  /// 1
 lv_obj_set_height( ui_VoltIcon, LV_SIZE_CONTENT);   /// 1
-lv_obj_set_x( ui_VoltIcon, 45 );
+lv_obj_set_x( ui_VoltIcon, -45 );
 lv_obj_set_y( ui_VoltIcon, 70 );
 lv_obj_set_align( ui_VoltIcon, LV_ALIGN_CENTER );
 lv_label_set_text(ui_VoltIcon,"");
@@ -166,7 +167,7 @@ lv_obj_set_style_text_font(ui_VoltIcon, &ui_font_FontAwesome35, LV_PART_MAIN| LV
 ui_VoltLabel = lv_label_create(ui_Riding);
 lv_obj_set_width( ui_VoltLabel, LV_SIZE_CONTENT);  /// 1
 lv_obj_set_height( ui_VoltLabel, LV_SIZE_CONTENT);   /// 1
-lv_obj_set_x( ui_VoltLabel, 45 );
+lv_obj_set_x( ui_VoltLabel, -45 );
 lv_obj_set_y( ui_VoltLabel, 105 );
 lv_obj_set_align( ui_VoltLabel, LV_ALIGN_CENTER );
 lv_label_set_text(ui_VoltLabel,"113V");

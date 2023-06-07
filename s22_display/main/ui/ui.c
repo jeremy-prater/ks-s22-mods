@@ -15,6 +15,9 @@ lv_obj_t *ui_BootConnect;
 lv_obj_t *ui_kslogo;
 lv_obj_t *ui_ConnectingLabel;
 lv_obj_t *ui_ConnectingBLEName;
+lv_obj_t *ui_ConnectErrorPanel;
+lv_obj_t *ui_ConnectBLEErrorTitle;
+lv_obj_t *ui_ConnectBLEErrorDescription;
 
 // SCREEN: ui_Riding
 void ui_Riding_screen_init(void);
@@ -63,6 +66,12 @@ void ui_event_BootConnect( lv_event_t * e) {
     lv_event_code_t event_code = lv_event_get_code(e);lv_obj_t * target = lv_event_get_target(e);
 if ( event_code == LV_EVENT_SCREEN_LOADED) {
       OnBootConnectLoaded( e );
+}
+if ( event_code == LV_EVENT_READY) {
+      _ui_screen_change( ui_Riding, LV_SCR_LOAD_ANIM_OVER_LEFT, 1000, 0);
+}
+if ( event_code == LV_EVENT_CANCEL) {
+      _ui_screen_change( ui_BootConnect, LV_SCR_LOAD_ANIM_OVER_RIGHT, 1000, 0);
 }
 }
 

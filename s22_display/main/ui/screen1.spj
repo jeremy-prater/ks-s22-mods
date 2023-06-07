@@ -2023,6 +2023,158 @@
               }
             ],
             "InheritedType": 4
+          },
+          {
+            "disabled": false,
+            "nid": -1489520374,
+            "strtype": "SCREEN/EventHandler",
+            "strval": "READY",
+            "childs": [
+              {
+                "nid": 1290391205,
+                "strtype": "_custom/name",
+                "strval": "ShowRidingScreen",
+                "InheritedType": 10
+              },
+              {
+                "nid": -1237433992,
+                "strtype": "_custom/condition_C",
+                "strval": "",
+                "InheritedType": 10
+              },
+              {
+                "nid": 1644017003,
+                "strtype": "_custom/condition_P",
+                "strval": "",
+                "InheritedType": 10
+              },
+              {
+                "nid": 484691011,
+                "strtype": "_custom/action",
+                "strval": "CHANGE SCREEN",
+                "childs": [
+                  {
+                    "nid": 1596598021,
+                    "strtype": "CHANGE SCREEN/Name",
+                    "strval": "CHANGE SCREEN",
+                    "InheritedType": 10
+                  },
+                  {
+                    "nid": 50049699,
+                    "strtype": "CHANGE SCREEN/Call",
+                    "strval": "ChangeScreen( <{Screen_to}>, lv.SCR_LOAD_ANIM.<{Fade_mode}>, <{Speed}>, <{Delay}>)",
+                    "InheritedType": 10
+                  },
+                  {
+                    "nid": -1593315600,
+                    "strtype": "CHANGE SCREEN/CallC",
+                    "strval": "_ui_screen_change( <{Screen_to}>, LV_SCR_LOAD_ANIM_<{Fade_mode}>, <{Speed}>, <{Delay}>);",
+                    "InheritedType": 10
+                  },
+                  {
+                    "nid": -2053906508,
+                    "strtype": "CHANGE SCREEN/Screen_to",
+                    "strval": "GUID57342315-378682S9272148",
+                    "InheritedType": 9
+                  },
+                  {
+                    "nid": -910432122,
+                    "strtype": "CHANGE SCREEN/Fade_mode",
+                    "strval": "OVER_LEFT",
+                    "InheritedType": 3
+                  },
+                  {
+                    "nid": -1551147522,
+                    "strtype": "CHANGE SCREEN/Speed",
+                    "integer": 1000,
+                    "InheritedType": 6
+                  },
+                  {
+                    "nid": 884872676,
+                    "strtype": "CHANGE SCREEN/Delay",
+                    "InheritedType": 6
+                  }
+                ],
+                "InheritedType": 10
+              }
+            ],
+            "InheritedType": 4
+          },
+          {
+            "disabled": false,
+            "nid": 650175992,
+            "strtype": "SCREEN/EventHandler",
+            "strval": "CANCEL",
+            "childs": [
+              {
+                "nid": -1158124093,
+                "strtype": "_custom/name",
+                "strval": "ShowBootConnectScreen",
+                "InheritedType": 10
+              },
+              {
+                "nid": -380012283,
+                "strtype": "_custom/condition_C",
+                "strval": "",
+                "InheritedType": 10
+              },
+              {
+                "nid": 1400416734,
+                "strtype": "_custom/condition_P",
+                "strval": "",
+                "InheritedType": 10
+              },
+              {
+                "nid": -654837914,
+                "strtype": "_custom/action",
+                "strval": "CHANGE SCREEN",
+                "childs": [
+                  {
+                    "nid": -1923204017,
+                    "strtype": "CHANGE SCREEN/Name",
+                    "strval": "CHANGE SCREEN",
+                    "InheritedType": 10
+                  },
+                  {
+                    "nid": -1096798111,
+                    "strtype": "CHANGE SCREEN/Call",
+                    "strval": "ChangeScreen( <{Screen_to}>, lv.SCR_LOAD_ANIM.<{Fade_mode}>, <{Speed}>, <{Delay}>)",
+                    "InheritedType": 10
+                  },
+                  {
+                    "nid": 1221892273,
+                    "strtype": "CHANGE SCREEN/CallC",
+                    "strval": "_ui_screen_change( <{Screen_to}>, LV_SCR_LOAD_ANIM_<{Fade_mode}>, <{Speed}>, <{Delay}>);",
+                    "InheritedType": 10
+                  },
+                  {
+                    "nid": 180190891,
+                    "strtype": "CHANGE SCREEN/Screen_to",
+                    "strval": "GUID2908329-876352S1172150",
+                    "InheritedType": 9
+                  },
+                  {
+                    "nid": 984054567,
+                    "strtype": "CHANGE SCREEN/Fade_mode",
+                    "strval": "OVER_RIGHT",
+                    "InheritedType": 3
+                  },
+                  {
+                    "nid": -899262374,
+                    "strtype": "CHANGE SCREEN/Speed",
+                    "integer": 1000,
+                    "InheritedType": 6
+                  },
+                  {
+                    "nid": -1440951222,
+                    "strtype": "CHANGE SCREEN/Delay",
+                    "InheritedType": 6
+                  }
+                ],
+                "InheritedType": 10
+              }
+            ],
+            "InheritedType": 4
           }
         ],
         "saved_objtypeKey": "SCREEN"
@@ -2679,7 +2831,7 @@
               {
                 "nid": 30434175,
                 "strtype": "ARC/Value",
-                "integer": 88,
+                "integer": 22,
                 "InheritedType": 6
               },
               {
@@ -2694,7 +2846,7 @@
               {
                 "nid": 329178564,
                 "strtype": "ARC/Mode",
-                "strval": "REVERSE",
+                "strval": "NORMAL",
                 "InheritedType": 3
               },
               {
@@ -2710,6 +2862,17 @@
                     "strtype": "_style/StyleState",
                     "strval": "DEFAULT",
                     "childs": [
+                      {
+                        "nid": 755955010,
+                        "strtype": "_style/Arc_Color",
+                        "intarray": [
+                          255,
+                          137,
+                          64,
+                          255
+                        ],
+                        "InheritedType": 7
+                      },
                       {
                         "nid": -2114154617,
                         "strtype": "_style/Arc_Width",
@@ -2754,9 +2917,9 @@
                         "nid": -1234636207,
                         "strtype": "_style/Arc_Color",
                         "intarray": [
-                          255,
-                          137,
-                          64,
+                          41,
+                          48,
+                          49,
                           255
                         ],
                         "InheritedType": 7
@@ -5188,7 +5351,7 @@
                 "flags": 17,
                 "strtype": "OBJECT/Position",
                 "intarray": [
-                  -45,
+                  45,
                   70
                 ],
                 "InheritedType": 7
@@ -5488,7 +5651,7 @@
                 "flags": 17,
                 "strtype": "OBJECT/Position",
                 "intarray": [
-                  -45,
+                  45,
                   105
                 ],
                 "InheritedType": 7
@@ -5777,7 +5940,7 @@
                 "flags": 17,
                 "strtype": "OBJECT/Position",
                 "intarray": [
-                  45,
+                  -45,
                   70
                 ],
                 "InheritedType": 7
@@ -6078,7 +6241,7 @@
                 "flags": 17,
                 "strtype": "OBJECT/Position",
                 "intarray": [
-                  45,
+                  -45,
                   105
                 ],
                 "InheritedType": 7
@@ -6531,8 +6694,7 @@
             "InheritedType": 11
           }
         ],
-        "saved_objtypeKey": "SCREEN",
-        "tree_closed": true
+        "saved_objtypeKey": "SCREEN"
       },
       {
         "guid": "GUID7504783-877056S3012150",
@@ -9593,7 +9755,7 @@
     "theme_color2": 0,
     "exportFolderPath": "/Users/jeremy.prater/src/ks-s22-mods/s22_display/main/ui",
     "projectExportFolderPath": "/Users/jeremy.prater/src/ks-s22-mods/s22_display/main/ui",
-    "backup_cnt": 21,
+    "backup_cnt": 38,
     "autosave_cnt": 0,
     "lvgl_version": "8.3.6",
     "callfuncsexport": "C_FILE",

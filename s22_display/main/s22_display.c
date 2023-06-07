@@ -21,6 +21,7 @@
 #include "esp_timer.h"
 #include "driver/gpio.h"
 #include "nvs_flash.h"
+#include "s22_display.h"
 
 #include "lvgl.h"
 #include "lvgl_helpers.h"
@@ -108,7 +109,7 @@ static void guiTask(void *pvParameter)
         .name = "periodic_gui"};
     esp_timer_handle_t periodic_timer;
     ESP_ERROR_CHECK(esp_timer_create(&periodic_timer_args, &periodic_timer));
-    ESP_ERROR_CHECK(esp_timer_start_periodic(periodic_timer, LV_TICK_PERIOD_MS * 16));
+    ESP_ERROR_CHECK(esp_timer_start_periodic(periodic_timer, LV_TICK_PERIOD_MS * 1000 * S22_DISPLAY_FPS_MS));
 
     /* Create the demo application */
 #if LV_USE_DEMO_WIDGETS
@@ -158,5 +159,5 @@ static void lv_tick_task(void *arg)
 {
     (void)arg;
 
-    lv_tick_inc(LV_TICK_PERIOD_MS);
+    lv_tick_inc(LV_TICK_PERIOD_MS * S22_DISPLAY_FPS_MS);
 }

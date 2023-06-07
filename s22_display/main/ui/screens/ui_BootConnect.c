@@ -40,6 +40,39 @@ lv_obj_set_align( ui_ConnectingBLEName, LV_ALIGN_CENTER );
 lv_label_set_text(ui_ConnectingBLEName,"KSN-S22-xxxxx");
 lv_obj_set_style_text_font(ui_ConnectingBLEName, &lv_font_montserrat_26, LV_PART_MAIN| LV_STATE_DEFAULT);
 
+ui_ConnectErrorPanel = lv_obj_create(ui_BootConnect);
+lv_obj_set_width( ui_ConnectErrorPanel, 240);
+lv_obj_set_height( ui_ConnectErrorPanel, 180);
+lv_obj_set_align( ui_ConnectErrorPanel, LV_ALIGN_CENTER );
+lv_obj_add_flag( ui_ConnectErrorPanel, LV_OBJ_FLAG_HIDDEN );   /// Flags
+lv_obj_clear_flag( ui_ConnectErrorPanel, LV_OBJ_FLAG_SCROLLABLE );    /// Flags
+lv_obj_set_style_outline_color(ui_ConnectErrorPanel, lv_color_hex(0xFF0000), LV_PART_MAIN | LV_STATE_DEFAULT );
+lv_obj_set_style_outline_opa(ui_ConnectErrorPanel, 255, LV_PART_MAIN| LV_STATE_DEFAULT);
+lv_obj_set_style_outline_width(ui_ConnectErrorPanel, 10, LV_PART_MAIN| LV_STATE_DEFAULT);
+lv_obj_set_style_outline_pad(ui_ConnectErrorPanel, 0, LV_PART_MAIN| LV_STATE_DEFAULT);
+
+ui_ConnectBLEErrorTitle = lv_label_create(ui_ConnectErrorPanel);
+lv_obj_set_width( ui_ConnectBLEErrorTitle, LV_SIZE_CONTENT);  /// 1
+lv_obj_set_height( ui_ConnectBLEErrorTitle, LV_SIZE_CONTENT);   /// 1
+lv_obj_set_x( ui_ConnectBLEErrorTitle, 0 );
+lv_obj_set_y( ui_ConnectBLEErrorTitle, -50 );
+lv_obj_set_align( ui_ConnectBLEErrorTitle, LV_ALIGN_CENTER );
+lv_label_set_text(ui_ConnectBLEErrorTitle," Bluetooth Error ");
+lv_obj_set_style_text_color(ui_ConnectBLEErrorTitle, lv_color_hex(0xDBFF00), LV_PART_MAIN | LV_STATE_DEFAULT );
+lv_obj_set_style_text_opa(ui_ConnectBLEErrorTitle, 255, LV_PART_MAIN| LV_STATE_DEFAULT);
+lv_obj_set_style_text_font(ui_ConnectBLEErrorTitle, &lv_font_montserrat_18, LV_PART_MAIN| LV_STATE_DEFAULT);
+
+ui_ConnectBLEErrorDescription = lv_label_create(ui_ConnectErrorPanel);
+lv_obj_set_width( ui_ConnectBLEErrorDescription, LV_SIZE_CONTENT);  /// 1
+lv_obj_set_height( ui_ConnectBLEErrorDescription, LV_SIZE_CONTENT);   /// 1
+lv_obj_set_x( ui_ConnectBLEErrorDescription, 0 );
+lv_obj_set_y( ui_ConnectBLEErrorDescription, 30 );
+lv_obj_set_align( ui_ConnectBLEErrorDescription, LV_ALIGN_CENTER );
+lv_label_set_text(ui_ConnectBLEErrorDescription,"Error Description goes\nhere...");
+lv_obj_set_style_text_color(ui_ConnectBLEErrorDescription, lv_color_hex(0xDBFF00), LV_PART_MAIN | LV_STATE_DEFAULT );
+lv_obj_set_style_text_opa(ui_ConnectBLEErrorDescription, 255, LV_PART_MAIN| LV_STATE_DEFAULT);
+lv_obj_set_style_text_font(ui_ConnectBLEErrorDescription, &lv_font_montserrat_18, LV_PART_MAIN| LV_STATE_DEFAULT);
+
 lv_obj_add_event_cb(ui_BootConnect, ui_event_BootConnect, LV_EVENT_ALL, NULL);
 
 }
