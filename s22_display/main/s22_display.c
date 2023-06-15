@@ -41,6 +41,18 @@ static void lv_tick_task(void *arg);
 static void guiTask(void *pvParameter);
 static void create_ui_application(void);
 
+const ble_addr_t s22_addr = {
+    .type = BLE_ADDR_PUBLIC,
+    .val = {
+        0x13,
+        0x71,
+        0xDA,
+        0x7D,
+        0x1A,
+        0x00
+        // 0xC2,0xC5,0xC3,0x01,0xF1,0x76
+    }};
+
 void app_main()
 {
     esp_err_t ret = nvs_flash_init();

@@ -14,18 +14,6 @@
 
 #define TAG "ble:client"
 
-const ble_addr_t s22_addr = {
-    .type = BLE_ADDR_PUBLIC,
-    .val = {
-        0x13,
-        0x71,
-        0xDA,
-        0x7D,
-        0x1A,
-        0x00
-        // 0xC2,0xC5,0xC3,0x01,0xF1,0x76
-    }};
-
 static int ble_s22_client_gap_event(struct ble_gap_event *event, void *arg);
 QueueHandle_t spp_common_uart_queue = NULL;
 

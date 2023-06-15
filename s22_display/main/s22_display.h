@@ -1,6 +1,8 @@
 #ifndef _S22_DISPLAY_
 #define _S22_DISPLAY_
 
+#include "ble/ble.h"
+
 #ifdef __cplusplus
 extern "C" {
 #endif
