@@ -17,6 +17,7 @@ SET(BLE_CLIENT_SOURCES
     ble/client.c
     ble/utils/peer.c
     ble/utils/misc.c
+    ble/packet.c
 )
 
 SET(SOURCES

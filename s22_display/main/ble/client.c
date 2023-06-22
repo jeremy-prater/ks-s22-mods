@@ -6,6 +6,7 @@
 #include "host/util/util.h"
 #include "ble/utils/utils.h"
 #include "ble/client.h"
+#include "ble/packet.h"
 #include "s22_display.h"
 #include "s22_model.h"
 #include "ui/ui.h"
@@ -25,8 +26,6 @@ static void goto_riding_screen()
     lv_event_t event;
     event.code = LV_EVENT_READY;
     ui_event_BootConnect(&event);
-    set_speed(20);
-    set_pwm(20);
 }
 
 static void goto_connect_screen()
@@ -50,6 +49,26 @@ ble_s22_client_set_handle(const struct peer *peer)
     ESP_LOGI(TAG, "Found characteristic UUID : %s with handle %d", ble_uuid_str, peer->conn_handle);
 
     goto_riding_screen();
+
+    s22_packet subscribe_packet = s22_packet_new();
+    subscribe_packet.command = 0x9B;
+    send_packet(&subscribe_packet);
+}
+
+int send_packet(s22_packet *packet)
+{
+    uint8_t *data = packet;
+    ESP_LOGI(TAG, "send packet : 0x%02X", packet->command);
+    int rc = ble_gattc_write_no_rsp_flat(0,
+                                         attribute_handle[0],
+                                         packet,
+                                         sizeof(s22_packet));
+    if (rc != 0)
+    {
+        ESP_LOGW(TAG, "ble_gattc_write_no_rsp_flat : %d", rc);
+    }
+
+    return rc;
 }
 
 /**
@@ -79,10 +98,6 @@ ble_s22_client_on_disc_complete(const struct peer *peer, int status, void *arg)
     struct peer_svc *svc;
     struct peer_chr *chr;
 
-    // SLIST_FOREACH(svc, &peer->svcs, next) {
-    //     SLIST_FOREACH(chr, &svc->chrs, next) {
-    //     }
-    // }
     ble_s22_client_set_handle(peer);
 #if CONFIG_BT_NIMBLE_MAX_CONNECTIONS > 1
     ble_s22_client_scan();
@@ -141,7 +156,7 @@ ble_s22_client_should_connect(const struct ble_gap_disc_desc *disc)
     int rc;
     int i;
 
-    rc = ble_addr_cmp(&disc->addr, (const ble_addr_t *)&s22_addr);
+    rc = ble_addr_cmp(&disc->addr, (const ble_addr_t *)&s22_addr_real);
     if (rc != 0)
     {
         return 0;
@@ -203,7 +218,7 @@ ble_s22_client_should_connect(const struct ble_gap_disc_desc *disc)
     //         return 1;
     //     }
     // }
-    return 0;
+    return 1;
 }
 
 /**
@@ -282,14 +297,14 @@ ble_s22_client_gap_event(struct ble_gap_event *event, void *arg)
                                      event->disc.length_data);
         if (rc != 0)
         {
-            ESP_LOGW(TAG, "Failed to parse advertisement fields : %02X:%02X:%02X:%02X:%02X:%02X",
+            ESP_LOGW(TAG, "Failed to parse advertisement fields : %02X:%02X:%02X:%02X:%02X:%02X : %02X",
                      event->disc.addr.val[5],
                      event->disc.addr.val[4],
                      event->disc.addr.val[3],
                      event->disc.addr.val[2],
                      event->disc.addr.val[1],
-                     event->disc.addr.val[0]);
-            // return 0;
+                     event->disc.addr.val[0],
+                     rc);
         }
 
         /* An advertisment report was received during GAP discovery. */
@@ -364,15 +379,25 @@ ble_s22_client_gap_event(struct ble_gap_event *event, void *arg)
 
     case BLE_GAP_EVENT_NOTIFY_RX:
         /* Peer sent us a notification or indication. */
-        MODLOG_DFLT(INFO, "received %s; conn_handle=%d attr_handle=%d "
-                          "attr_len=%d\n",
-                    event->notify_rx.indication ? "indication" : "notification",
-                    event->notify_rx.conn_handle,
-                    event->notify_rx.attr_handle,
-                    OS_MBUF_PKTLEN(event->notify_rx.om));
+        // MODLOG_DFLT(INFO, "received %s; conn_handle=%d attr_handle=%d "
+        //                   "attr_len=%d\n",
+        //             event->notify_rx.indication ? "indication" : "notification",
+        //             event->notify_rx.conn_handle,
+        //             event->notify_rx.attr_handle,
+        //             OS_MBUF_PKTLEN(event->notify_rx.om));
 
         /* Attribute data is contained in event->notify_rx.om. Use
          * `os_mbuf_copydata` to copy the data received in notification mbuf */
+        if (OS_MBUF_PKTLEN(event->notify_rx.om) == sizeof(s22_packet))
+        {
+            uint8_t *data = OS_MBUF_DATA(event->notify_rx.om, uint8_t *);
+            s22_packet packet = s22_packet_from_raw_bytes(data);
+            if (packet.header[0] == 0xAA && packet.header[1] == 0x55)
+            {
+                xQueueSend(wheel_notification_queue, (void *)&packet, 0);
+            }
+        }
+
         return 0;
 
     case BLE_GAP_EVENT_MTU:

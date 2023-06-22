@@ -33,6 +33,7 @@
 #endif
 
 #include "ble/ble.h"
+#include "host/ble_hs.h"
 
 #define TAG "s22-main"
 #define LV_TICK_PERIOD_MS 1
@@ -41,7 +42,29 @@ static void lv_tick_task(void *arg);
 static void guiTask(void *pvParameter);
 static void create_ui_application(void);
 
-const ble_addr_t s22_addr = {
+const ble_addr_t s22_addr_real = {
+    .type = BLE_ADDR_PUBLIC,
+    .val = {
+        0x39,
+        0xE3,
+        0x01,
+        0xC3,
+        0xC5,
+        0xC2
+        }};
+
+const ble_addr_t s22_addr_bad_board = {
+    .type = BLE_ADDR_PUBLIC,
+    .val = {
+        0x76,
+        0xF1,
+        0x01,
+        0xC3,
+        0xC5,
+        0xC2
+        }};
+
+const ble_addr_t s22_addr_sim = {
     .type = BLE_ADDR_PUBLIC,
     .val = {
         0x13,
@@ -50,13 +73,13 @@ const ble_addr_t s22_addr = {
         0x7D,
         0x1A,
         0x00
-        // 0xC2,0xC5,0xC3,0x01,0xF1,0x76
-    }};
+        }};
 
 void app_main()
 {
     esp_err_t ret = nvs_flash_init();
-    if  (ret == ESP_ERR_NVS_NO_FREE_PAGES || ret == ESP_ERR_NVS_NEW_VERSION_FOUND) {
+    if (ret == ESP_ERR_NVS_NO_FREE_PAGES || ret == ESP_ERR_NVS_NEW_VERSION_FOUND)
+    {
         ESP_ERROR_CHECK(nvs_flash_erase());
         ret = nvs_flash_init();
     }
@@ -128,7 +151,7 @@ static void guiTask(void *pvParameter)
     lv_demo_widgets();
 #else
     create_ui_application();
-#endif    
+#endif
 
     while (1)
     {

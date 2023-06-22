@@ -6,6 +6,7 @@ extern "C" {
 #endif
 
 #include "nimble/ble.h"
+#include "ble/packet.h"
 
 /* 16 Bit SPP Service UUID */
 #define GATT_SPP_SVC_UUID                                  0xFFE0
@@ -19,7 +20,11 @@ void ble_s22_client_on_sync(void);
 
 void ble_s22_client_scan(void);
 
-extern const ble_addr_t s22_addr;
+int send_packet(s22_packet *packet);
+
+extern const ble_addr_t s22_addr_real;
+extern const ble_addr_t s22_addr_bad_board;
+extern const ble_addr_t s22_addr_sim;
 
 #ifdef __cplusplus
 } /*extern "C"*/

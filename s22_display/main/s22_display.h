@@ -10,7 +10,7 @@ extern "C" {
 // #define KS_S22_BLE_NAME "KSN-S22-127350"
 #define KS_S22_BLE_NAME "KSN-S22-TEST22"
 
-#define S22_DISPLAY_FPS_MS 100
+#define S22_DISPLAY_FPS_MS 16
 
 #ifdef __cplusplus
 } /*extern "C"*/
