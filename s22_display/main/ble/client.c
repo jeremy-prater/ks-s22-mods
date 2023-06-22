@@ -156,7 +156,7 @@ ble_s22_client_should_connect(const struct ble_gap_disc_desc *disc)
     int rc;
     int i;
 
-    rc = ble_addr_cmp(&disc->addr, (const ble_addr_t *)&s22_addr_real);
+    rc = ble_addr_cmp(&disc->addr, (const ble_addr_t *)&s22_addr_bad_board);
     if (rc != 0)
     {
         return 0;

@@ -93,9 +93,9 @@ static void wheel_event_task(void *param)
                 uint16_t voltage = decode_2byte_unsigned(&packet.payload[0]) / 100;
                 uint16_t speed = decode_2byte_unsigned(&packet.payload[2]) / 100;
                 uint32_t odo = decode_4byte_unsigned(&packet.payload[4]) / 1000;
-                int16_t current = decode_2byte_signed(&packet.payload[8]);
+                int16_t current = decode_2byte_signed(&packet.payload[8]) / 100;
                 uint16_t temp = decode_2byte_unsigned(&packet.payload[10]) / 100;
-                ESP_LOGI(TAG, "Got VSOCT : %u %u %lu %d %u", voltage, speed, odo, current, temp);
+                // ESP_LOGI(TAG, "Got VSOCT : %u %u %lu %d %u", voltage, speed, odo, current, temp);
                 set_speed(speed);
                 set_voltage(voltage);
                 set_temp(temp);
