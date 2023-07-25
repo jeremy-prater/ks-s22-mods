@@ -50,8 +50,7 @@ const ble_addr_t s22_addr_real = {
         0x01,
         0xC3,
         0xC5,
-        0xC2
-        }};
+        0xC2}};
 
 const ble_addr_t s22_addr_bad_board = {
     .type = BLE_ADDR_PUBLIC,
@@ -61,8 +60,7 @@ const ble_addr_t s22_addr_bad_board = {
         0x01,
         0xC3,
         0xC5,
-        0xC2
-        }};
+        0xC2}};
 
 const ble_addr_t s22_addr_sim = {
     .type = BLE_ADDR_PUBLIC,
@@ -72,8 +70,7 @@ const ble_addr_t s22_addr_sim = {
         0xDA,
         0x7D,
         0x1A,
-        0x00
-        }};
+        0x00}};
 
 void app_main()
 {
@@ -128,15 +125,15 @@ static void guiTask(void *pvParameter)
     disp_drv.draw_buf = &disp_buf;
     lv_disp_t *display = lv_disp_drv_register(&disp_drv);
 
-#if defined CONFIG_DISPLAY_ORIENTATION_PORTRAIT
-    lv_disp_set_rotation(display, LV_DISP_ROT_NONE);
-#elif defined CONFIG_DISPLAY_ORIENTATION_LANDSCAPE
-    lv_disp_set_rotation(display, LV_DISP_ROT_90);
-#elif defined CONFIG_DISPLAY_ORIENTATION_PORTRAIT_INVERTED
-    lv_disp_set_rotation(display, LV_DISP_ROT_180);
-#elif defined CONFIG_DISPLAY_ORIENTATION_LANDSCAPE_INVERTED
-    lv_disp_set_rotation(display, LV_DISP_ROT_270);
-#endif
+    // #if defined CONFIG_DISPLAY_ORIENTATION_PORTRAIT
+    //     lv_disp_set_rotation(display, LV_DISP_ROT_NONE);
+    // #elif defined CONFIG_DISPLAY_ORIENTATION_LANDSCAPE
+    //     lv_disp_set_rotation(display, LV_DISP_ROT_90);
+    // #elif defined CONFIG_DISPLAY_ORIENTATION_PORTRAIT_INVERTED
+    //     lv_disp_set_rotation(display, LV_DISP_ROT_180);
+    // #elif defined CONFIG_DISPLAY_ORIENTATION_LANDSCAPE_INVERTED
+    //     lv_disp_set_rotation(display, LV_DISP_ROT_270);
+    // #endif
 
     /* Create and start a periodic timer interrupt to call lv_tick_inc */
     const esp_timer_create_args_t periodic_timer_args = {
