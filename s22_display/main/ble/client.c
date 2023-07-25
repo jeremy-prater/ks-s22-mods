@@ -10,6 +10,7 @@
 #include "s22_display.h"
 #include "s22_model.h"
 #include "ui/ui.h"
+#include "leds.h"
 
 #define PEER_ADDR_VAL_SIZE 6
 
@@ -26,6 +27,7 @@ static void goto_riding_screen()
     lv_event_t event;
     event.code = LV_EVENT_READY;
     ui_event_BootConnect(&event);
+    leds_set_scene(LED_SCENE_RIDING);
 }
 
 static void goto_connect_screen()
@@ -33,6 +35,7 @@ static void goto_connect_screen()
     lv_event_t event;
     event.code = LV_EVENT_CANCEL;
     ui_event_BootConnect(&event);
+    leds_set_scene(LED_SCENE_BLE_SCANNING);
 }
 
 static void

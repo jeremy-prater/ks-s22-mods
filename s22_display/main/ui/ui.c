@@ -68,10 +68,10 @@ if ( event_code == LV_EVENT_SCREEN_LOADED) {
       OnBootConnectLoaded( e );
 }
 if ( event_code == LV_EVENT_READY) {
-      _ui_screen_change( ui_Riding, LV_SCR_LOAD_ANIM_OVER_LEFT, 1000, 0);
+      _ui_screen_change( ui_Riding, LV_SCR_LOAD_ANIM_MOVE_LEFT, 1000, 0);
 }
 if ( event_code == LV_EVENT_CANCEL) {
-      _ui_screen_change( ui_BootConnect, LV_SCR_LOAD_ANIM_OVER_RIGHT, 1000, 0);
+      _ui_screen_change( ui_BootConnect, LV_SCR_LOAD_ANIM_MOVE_RIGHT, 1000, 0);
 }
 }
 

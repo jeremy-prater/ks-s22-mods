@@ -4,7 +4,8 @@
 #include "ble/ble.h"
 
 #ifdef __cplusplus
-extern "C" {
+extern "C"
+{
 #endif
 
 // #define KS_S22_BLE_NAME "KSN-S22-127350"

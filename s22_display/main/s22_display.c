@@ -22,6 +22,8 @@
 #include "driver/gpio.h"
 #include "nvs_flash.h"
 #include "s22_display.h"
+#include "leds.h"
+#include "sound.h"
 
 #include "lvgl.h"
 #include "lvgl_helpers.h"
@@ -97,6 +99,8 @@ SemaphoreHandle_t xGuiSemaphore;
 
 static void guiTask(void *pvParameter)
 {
+    leds_init();
+    sound_init();
 
     (void)pvParameter;
     xGuiSemaphore = xSemaphoreCreateMutex();
@@ -167,19 +171,6 @@ static void guiTask(void *pvParameter)
     free(buf1);
     free(buf2);
     vTaskDelete(NULL);
-}
-
-static void btn_event_cb(lv_obj_t *btn, lv_event_t event)
-{
-    if (event.code == LV_EVENT_CLICKED)
-    {
-        static uint8_t cnt = 0;
-        cnt++;
-
-        /*Get the first child of the button which is the label and change its text*/
-        lv_obj_t *label = lv_obj_get_child(btn, 0);
-        lv_label_set_text_fmt(label, "Button: %d", cnt);
-    }
 }
 
 static void create_ui_application(void)

@@ -21,6 +21,8 @@ SET(BLE_CLIENT_SOURCES
 )
 
 SET(SOURCES
+    leds.c
+    sound.c
     s22_display.c
     s22_model.c
 )
@@ -28,5 +30,5 @@ SET(SOURCES
 idf_component_register(
     SRCS ${SOURCES} ${UI_SOURCES} ${BLE_CLIENT_SOURCES}
     INCLUDE_DIRS .
-    REQUIRES lvgl lvgl_esp32_drivers driver nvs_flash bt
+    REQUIRES lvgl lvgl_esp32_drivers driver nvs_flash bt led_strip
 )

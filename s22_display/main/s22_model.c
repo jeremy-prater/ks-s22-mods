@@ -4,9 +4,22 @@
 
 #define TAG "s22-model"
 
+typedef struct
+{
+    uint16_t voltage;
+    uint16_t speed;
+    int16_t current;
+    uint16_t temp;
+    uint16_t battery_percent;
+    uint16_t pwm;
+} s22_model;
+
+static s22_model model;
+
 // Directly from BLE
 void set_voltage(uint16_t voltage)
 {
+    model.voltage = voltage;
     char voltage_str[5];
     itoa(voltage, voltage_str, 10);
     strcat(voltage_str, "V");
@@ -25,8 +38,7 @@ void set_voltage(uint16_t voltage)
 
 void set_speed(uint16_t speed)
 {
-    // ESP_LOGI(TAG, "Setting Speed : %d", speed);
-
+    model.speed = speed;
     char speed_str[4];
     itoa(speed, speed_str, 10);
     // Generate color gradient
@@ -38,6 +50,7 @@ void set_speed(uint16_t speed)
 
 void set_current(int16_t amps)
 {
+    model.current = amps;
     char current_str[8];
     itoa(amps, current_str, 10);
     strcat(current_str, "A");
@@ -47,6 +60,7 @@ void set_current(int16_t amps)
 }
 void set_temp(uint16_t temp)
 {
+    model.temp = temp;
     char temp_str[4];
     int8_t temp_f = (temp * (9.0 / 5.0)) + 32.0;
     itoa(temp_f, temp_str, 10);
@@ -77,4 +91,31 @@ void set_batt_percent(uint16_t batt_percent)
     // Generate color gradient
     lv_color_t color = lv_color_hex(0xFFFFFF);
     lv_label_set_text(ui_BatteryValue, batt_str);
+}
+
+// Getters
+
+uint16_t get_voltage()
+{
+    return model.voltage;
+}
+uint16_t get_speed()
+{
+    return model.speed;
+}
+int16_t get_current()
+{
+    return model.current;
+}
+uint16_t get_temp()
+{
+    return model.temp;
+}
+uint16_t get_pwm()
+{
+    return model.pwm;
+}
+uint16_t get_battery_percent()
+{
+    return model.battery_percent;
 }
