@@ -24,6 +24,7 @@
 #include "s22_display.h"
 #include "leds.h"
 #include "sound.h"
+#include "spiffs.h"
 
 #include "lvgl.h"
 #include "lvgl_helpers.h"
@@ -90,6 +91,11 @@ void app_main()
      * Otherwise there can be problem such as memory corruption and so on.
      * NOTE: When not using Wi-Fi nor Bluetooth you can pin the guiTask to core 0 */
     xTaskCreatePinnedToCore(guiTask, "gui", 4096 * 2, NULL, 0, NULL, 1);
+
+    // Party time
+    spiffs_init("audio");
+    leds_init();
+    sound_init();
 }
 
 /* Creates a semaphore to handle concurrent call to lvgl stuff
@@ -99,9 +105,6 @@ SemaphoreHandle_t xGuiSemaphore;
 
 static void guiTask(void *pvParameter)
 {
-    // leds_init();
-    sound_init();
-
     (void)pvParameter;
     xGuiSemaphore = xSemaphoreCreateMutex();
 

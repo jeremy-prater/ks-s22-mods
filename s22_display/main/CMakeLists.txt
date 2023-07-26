@@ -23,14 +23,15 @@ SET(BLE_CLIENT_SOURCES
 SET(SOURCES
     leds.c
     sound.c
+    spiffs.c
     s22_display.c
     s22_model.c
 )
 
-spiffs_create_partition_image(audio audio FLASH_IN_PROJECT)
-
 idf_component_register(
     SRCS ${SOURCES} ${UI_SOURCES} ${BLE_CLIENT_SOURCES}
     INCLUDE_DIRS .
-    REQUIRES lvgl lvgl_esp32_drivers driver nvs_flash bt led_strip
+    REQUIRES lvgl lvgl_esp32_drivers driver nvs_flash bt led_strip spiffs
 )
+
+spiffs_create_partition_image(audio audio FLASH_IN_PROJECT)
