@@ -99,7 +99,7 @@ SemaphoreHandle_t xGuiSemaphore;
 
 static void guiTask(void *pvParameter)
 {
-    leds_init();
+    // leds_init();
     sound_init();
 
     (void)pvParameter;
