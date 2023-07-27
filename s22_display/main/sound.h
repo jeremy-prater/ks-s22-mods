@@ -7,6 +7,7 @@ extern "C"
 #endif
 
     void sound_init();
+    void sound_play(const char * filename);
 
 #ifdef __cplusplus
 } /*extern "C"*/

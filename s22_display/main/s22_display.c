@@ -93,9 +93,10 @@ void app_main()
     xTaskCreatePinnedToCore(guiTask, "gui", 4096 * 2, NULL, 0, NULL, 1);
 
     // Party time
-    spiffs_init("audio");
     leds_init();
+    spiffs_init("audio");
     sound_init();
+    sound_play("/audio/power_on.pcm");
 }
 
 /* Creates a semaphore to handle concurrent call to lvgl stuff
