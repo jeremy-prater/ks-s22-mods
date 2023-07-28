@@ -25,6 +25,7 @@
 #include "leds.h"
 #include "sound.h"
 #include "spiffs.h"
+#include "buttons.h"
 
 #include "lvgl.h"
 #include "lvgl_helpers.h"
@@ -96,7 +97,9 @@ void app_main()
     leds_init();
     spiffs_init("audio");
     sound_init();
-    sound_play("/audio/power_on.pcm");
+    buttons_init();
+    // sound_play("/audio/power_on.pcm");
+    // sound_play("/audio/rick.pcm");
 }
 
 /* Creates a semaphore to handle concurrent call to lvgl stuff
