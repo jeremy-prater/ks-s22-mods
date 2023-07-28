@@ -26,6 +26,7 @@
 #include "sound.h"
 #include "spiffs.h"
 #include "buttons.h"
+#include "battery.h"
 
 #include "lvgl.h"
 #include "lvgl_helpers.h"
@@ -94,6 +95,7 @@ void app_main()
     xTaskCreatePinnedToCore(guiTask, "gui", 4096 * 2, NULL, 0, NULL, 1);
 
     // Party time
+    pmic_init();
     leds_init();
     spiffs_init("audio");
     sound_init();

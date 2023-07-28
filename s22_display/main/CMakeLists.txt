@@ -21,6 +21,7 @@ SET(BLE_CLIENT_SOURCES
 )
 
 SET(SOURCES
+    battery.c
     buttons.c
     leds.c
     sound.c
