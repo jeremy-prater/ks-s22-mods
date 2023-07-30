@@ -69,7 +69,7 @@ void sound_play(const char *filename)
     start_time = xTaskGetTickCount();
 }
 
-void sound_i2c_writer_task(void *param)
+static void sound_i2s_writer_task(void *param)
 {
     while (true)
     {
@@ -127,7 +127,7 @@ void sound_init()
     i2s_driver_install(I2S_NUM_0, &i2s_config, 4, &i2s_event_queue);
     i2s_set_dac_mode(I2S_DAC_CHANNEL_RIGHT_EN);
     i2s_zero_dma_buffer(I2S_NUM_0);
-    xTaskCreatePinnedToCore(sound_i2c_writer_task, "i2s_writer", 4096, NULL, 0, NULL, 1);
+    xTaskCreatePinnedToCore(sound_i2s_writer_task, "i2s_writer", 4096, NULL, 0, NULL, 1);
 
     ESP_LOGI(TAG, "Sound system init : I2S / DAC ready");
 }
