@@ -8,8 +8,8 @@
   "bpp": 2,
   "letters": 0,
   "ranges": [
-    "0xf241",
-    "  0xf2c9",
+    "0xf240-0xf244",
+    " 0xf2c7-0xf2cb",
     " 0xf0e7",
     " 0xf1e6"
   ],

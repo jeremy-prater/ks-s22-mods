@@ -18,6 +18,8 @@ lv_obj_t *ui_ConnectingBLEName;
 lv_obj_t *ui_ConnectErrorPanel;
 lv_obj_t *ui_ConnectBLEErrorTitle;
 lv_obj_t *ui_ConnectBLEErrorDescription;
+lv_obj_t *ui_M5Battery0Charging;
+lv_obj_t *ui_M5Battery0;
 
 // SCREEN: ui_Riding
 void ui_Riding_screen_init(void);
@@ -36,6 +38,8 @@ lv_obj_t *ui_CurrentIcon;
 lv_obj_t *ui_CurrentValue;
 lv_obj_t *ui_VoltIcon;
 lv_obj_t *ui_VoltLabel;
+lv_obj_t *ui_M5Battery1Charging;
+lv_obj_t *ui_M5Battery1;
 
 // SCREEN: ui_Charging
 void ui_Charging_screen_init(void);
@@ -49,6 +53,8 @@ lv_obj_t *ui_ChgTempIcon;
 lv_obj_t *ui_ChgVoltageValue;
 lv_obj_t *ui_ChgCurrentValue;
 lv_obj_t *ui_ChgBatteryValue;
+lv_obj_t *ui_M5Battery2Charging;
+lv_obj_t *ui_M5Battery2;
 lv_obj_t *ui____initial_actions0;
 
 ///////////////////// TEST LVGL SETTINGS ////////////////////
@@ -68,10 +74,10 @@ if ( event_code == LV_EVENT_SCREEN_LOADED) {
       OnBootConnectLoaded( e );
 }
 if ( event_code == LV_EVENT_READY) {
-      _ui_screen_change( ui_Riding, LV_SCR_LOAD_ANIM_MOVE_LEFT, 1000, 0);
+      _ui_screen_change( ui_Riding, LV_SCR_LOAD_ANIM_OVER_LEFT, 1000, 0);
 }
 if ( event_code == LV_EVENT_CANCEL) {
-      _ui_screen_change( ui_BootConnect, LV_SCR_LOAD_ANIM_MOVE_RIGHT, 1000, 0);
+      _ui_screen_change( ui_BootConnect, LV_SCR_LOAD_ANIM_OVER_RIGHT, 1000, 0);
 }
 }
 

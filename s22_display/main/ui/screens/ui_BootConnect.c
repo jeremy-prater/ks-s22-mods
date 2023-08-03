@@ -73,6 +73,28 @@ lv_obj_set_style_text_color(ui_ConnectBLEErrorDescription, lv_color_hex(0xDBFF00
 lv_obj_set_style_text_opa(ui_ConnectBLEErrorDescription, 255, LV_PART_MAIN| LV_STATE_DEFAULT);
 lv_obj_set_style_text_font(ui_ConnectBLEErrorDescription, &lv_font_montserrat_18, LV_PART_MAIN| LV_STATE_DEFAULT);
 
+ui_M5Battery0Charging = lv_label_create(ui_BootConnect);
+lv_obj_set_width( ui_M5Battery0Charging, 40);
+lv_obj_set_height( ui_M5Battery0Charging, 35);
+lv_obj_set_x( ui_M5Battery0Charging, 135 );
+lv_obj_set_y( ui_M5Battery0Charging, -105 );
+lv_obj_set_align( ui_M5Battery0Charging, LV_ALIGN_CENTER );
+lv_label_set_text(ui_M5Battery0Charging,"");
+lv_obj_set_style_text_color(ui_M5Battery0Charging, lv_color_hex(0x00FF08), LV_PART_MAIN | LV_STATE_DEFAULT );
+lv_obj_set_style_text_opa(ui_M5Battery0Charging, 255, LV_PART_MAIN| LV_STATE_DEFAULT);
+lv_obj_set_style_text_align(ui_M5Battery0Charging, LV_TEXT_ALIGN_CENTER, LV_PART_MAIN| LV_STATE_DEFAULT);
+lv_obj_set_style_text_font(ui_M5Battery0Charging, &ui_font_FontAwesome35, LV_PART_MAIN| LV_STATE_DEFAULT);
+
+ui_M5Battery0 = lv_label_create(ui_BootConnect);
+lv_obj_set_width( ui_M5Battery0, 40);
+lv_obj_set_height( ui_M5Battery0, 35);
+lv_obj_set_x( ui_M5Battery0, 135 );
+lv_obj_set_y( ui_M5Battery0, -105 );
+lv_obj_set_align( ui_M5Battery0, LV_ALIGN_CENTER );
+lv_label_set_text(ui_M5Battery0,"");
+lv_obj_set_style_text_align(ui_M5Battery0, LV_TEXT_ALIGN_CENTER, LV_PART_MAIN| LV_STATE_DEFAULT);
+lv_obj_set_style_text_font(ui_M5Battery0, &ui_font_FontAwesome35, LV_PART_MAIN| LV_STATE_DEFAULT);
+
 lv_obj_add_event_cb(ui_BootConnect, ui_event_BootConnect, LV_EVENT_ALL, NULL);
 
 }

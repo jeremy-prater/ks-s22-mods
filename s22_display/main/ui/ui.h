@@ -24,6 +24,8 @@ extern lv_obj_t *ui_ConnectingBLEName;
 extern lv_obj_t *ui_ConnectErrorPanel;
 extern lv_obj_t *ui_ConnectBLEErrorTitle;
 extern lv_obj_t *ui_ConnectBLEErrorDescription;
+extern lv_obj_t *ui_M5Battery0Charging;
+extern lv_obj_t *ui_M5Battery0;
 // SCREEN: ui_Riding
 void ui_Riding_screen_init(void);
 extern lv_obj_t *ui_Riding;
@@ -41,6 +43,8 @@ extern lv_obj_t *ui_CurrentIcon;
 extern lv_obj_t *ui_CurrentValue;
 extern lv_obj_t *ui_VoltIcon;
 extern lv_obj_t *ui_VoltLabel;
+extern lv_obj_t *ui_M5Battery1Charging;
+extern lv_obj_t *ui_M5Battery1;
 // SCREEN: ui_Charging
 void ui_Charging_screen_init(void);
 extern lv_obj_t *ui_Charging;
@@ -53,6 +57,8 @@ extern lv_obj_t *ui_ChgTempIcon;
 extern lv_obj_t *ui_ChgVoltageValue;
 extern lv_obj_t *ui_ChgCurrentValue;
 extern lv_obj_t *ui_ChgBatteryValue;
+extern lv_obj_t *ui_M5Battery2Charging;
+extern lv_obj_t *ui_M5Battery2;
 extern lv_obj_t *ui____initial_actions0;
 
 LV_IMG_DECLARE( ui_img_bg_png);   // assets/bg.png

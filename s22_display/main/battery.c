@@ -4,6 +4,7 @@
 #include <freertos/task.h>
 #include <esp_system.h>
 #include "esp_log.h"
+#include "s22_model.h"
 
 #define TAG "m5_pmic"
 
@@ -99,33 +100,41 @@ static uint8_t pmic_read_byte(uint8_t reg)
     return data;
 }
 
-static bool pmic_is_charging()
+static m5_battery_charging_t pmic_is_charging()
 {
     uint8_t charging = pmic_read_byte(IP5306_REG_READ0);
-    return charging & CHARGE_ENABLE_BIT;
+    if (charging & CHARGE_ENABLE_BIT)
+    {
+        return M5_BATTERY_CHARGING_YES;
+    }
+    return M5_BATTERY_CHARGING_NO;
 }
 
-static bool pmic_is_charging_full()
+static m5_battery_full_t pmic_is_charging_full()
 {
-    uint8_t charging = pmic_read_byte(IP5306_REG_READ1);
-    return charging & CHARGE_FULL_BIT;
+    uint8_t full = pmic_read_byte(IP5306_REG_READ1);
+    if (full & CHARGE_FULL_BIT)
+    {
+        return M5_BATTERY_FULL_YES;
+    }
+    return M5_BATTERY_FULL_NO;
 }
 
-static uint8_t pmic_get_battery_level()
+static m5_battery_level_t pmic_get_battery_level()
 {
     uint8_t level = pmic_read_byte(IP5306_REG_READ3);
     switch (level & 0xF0)
     {
     case 0x00:
-        return 100;
+        return M5_BATTERY_LEVEL_100;
     case 0x80:
-        return 75;
+        return M5_BATTERY_LEVEL_75;
     case 0xC0:
-        return 50;
+        return M5_BATTERY_LEVEL_50;
     case 0xE0:
-        return 25;
+        return M5_BATTERY_LEVEL_25;
     default:
-        return 0;
+        return M5_BATTERY_LEVEL_0;
     }
 }
 
@@ -133,15 +142,11 @@ static void pmic_update_task(void *param)
 {
     while (true)
     {
-        bool is_charging = pmic_is_charging();
-        bool is_full = pmic_is_charging_full();
-        uint8_t level = pmic_get_battery_level();
+        set_m5_charging(pmic_is_charging());
+        set_m5_charging_full(pmic_is_charging_full());
+        set_m5_battery_percent(pmic_get_battery_level());
 
-        ESP_LOGI(TAG, "Update PMIC data : charging %d", is_charging);
-        ESP_LOGI(TAG, "Update PMIC data : full %d", is_full);
-        ESP_LOGI(TAG, "Update PMIC data : level %d", level);
-
-        vTaskDelay(pdMS_TO_TICKS(5000)); // 5 second
+        vTaskDelay(pdMS_TO_TICKS(1000)); // 1 second
     }
 }
 
@@ -158,6 +163,11 @@ void pmic_init()
         .master.clk_speed = 100000, // 100 khz
         .clk_flags = 0,
     };
+
+    pmic_info.charging = M5_BATTERY_CHARGING_UNKNOWN;
+    pmic_info.full = M5_BATTERY_FULL_UNKNOWN;
+    pmic_info.level = M5_BATTERY_LEVEL_UNKNOWN;
+
     ESP_ERROR_CHECK(i2c_param_config(I2C_NUM_0, &i2c_conf));
 
     ESP_ERROR_CHECK(i2c_driver_install(I2C_NUM_0, I2C_MODE_MASTER, 0, 0, ESP_INTR_FLAG_LEVEL1));
@@ -181,7 +191,10 @@ void pmic_init()
     // Vin charge CC
     uint8_t charge_cc = pmic_read_byte(IP5306_REG_CHG_CTL3);
     pmic_write_byte(IP5306_REG_CHG_CTL3, (charge_cc & 0xDF) | 0x20);
+}
 
+void start_pmic_task()
+{
     xTaskCreatePinnedToCore(pmic_update_task, "pmic_update", 4096, NULL, 0, NULL, 1);
 }
 

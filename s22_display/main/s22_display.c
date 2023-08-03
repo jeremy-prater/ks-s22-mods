@@ -163,6 +163,8 @@ static void guiTask(void *pvParameter)
     create_ui_application();
 #endif
 
+    start_pmic_task();
+
     while (1)
     {
         /* Delay 1 tick (assumes FreeRTOS tick is 10ms */
