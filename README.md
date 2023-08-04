@@ -263,7 +263,9 @@ CS - GPIO A4
 
 - Steps to install (linux or mac os)
 
-1. go to the display code directory
+- Pre requirements : git, python
+
+1. Clone this repo and go to the display code directory
 ```
 cd s22_display
 ```
