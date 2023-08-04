@@ -159,7 +159,7 @@ ble_s22_client_should_connect(const struct ble_gap_disc_desc *disc)
     int rc;
     int i;
 
-    rc = ble_addr_cmp(&disc->addr, (const ble_addr_t *)&s22_addr_bad_board);
+    rc = ble_addr_cmp(&disc->addr, (const ble_addr_t *)&s22_addr_real);
     if (rc != 0)
     {
         return 0;
@@ -312,6 +312,14 @@ ble_s22_client_gap_event(struct ble_gap_event *event, void *arg)
 
         /* An advertisment report was received during GAP discovery. */
         print_adv_fields(&fields);
+
+        if (fields.name_len > 0 && strncmp((const char*)fields.name, "KSN-", 4) == 0)
+        {
+            char * ble_name = malloc(fields.name_len + 1);
+            memcpy(ble_name, fields.name, fields.name_len);
+            ble_name[fields.name_len] = 0x00;
+            ESP_LOGI(TAG, "Found BLE Device : %s", ble_name);
+        }
 
         /* Try to connect to the advertiser if it looks interesting. */
         ble_s22_client_connect_if_interesting(&event->disc);
