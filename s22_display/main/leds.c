@@ -135,10 +135,10 @@ static void leds_scene_ble_scan(TickType_t delta_time)
 static void leds_scene_riding(TickType_t delta_time)
 {
     rgb_t * speed_color = get_speed_color();
-    rgb_t * pwm_color = speed_color;
+    rgb_t * pwm_color = get_power_color();
     for (uint8_t index = 0; index < 5; index++)
     {
-        leds_set_color(index, *speed_color);
-        leds_set_color(index + 5, *pwm_color);
+        leds_set_color(index + 5, *speed_color);
+        leds_set_color(index, *pwm_color);
     }
 }

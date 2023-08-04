@@ -11,7 +11,9 @@ typedef struct
     uint16_t voltage;
     uint16_t speed;
     rgb_t *speed_color;
+    rgb_t *power_color;
     int16_t current;
+    int16_t power;
     uint16_t temp;
     uint16_t battery_percent;
     uint16_t pwm;
@@ -24,10 +26,33 @@ void model_init()
     model.voltage = 0xFFFF;
     model.speed = 0xFFFF;
     model.speed_color = gradient_get_color(0);
+    model.power_color = gradient_get_color(0);
     model.current = 0xFFFF;
+    model.power = 0xFFFF;
     model.temp = 0xFFFF;
     model.battery_percent = 0xFFFF;
     model.pwm = 0xFFFF;
+}
+
+static void update_power()
+{
+    model.power = model.voltage * model.current;
+
+    char power_str[5];
+    itoa(model.power, power_str, 10);
+
+    int16_t display_power = abs(model.power);
+    if (display_power > 3300)
+    {
+        display_power = 3300;
+    }
+    uint8_t meter_range = display_power / 33.0f;
+    rgb_t *meter_color = gradient_get_color(meter_range * 2.55f);
+    lv_label_set_text(ui_PWMValue, power_str);
+    lv_arc_set_value(ui_PWMMeter, 100 - meter_range);
+    lv_color_t power_color = lv_color_make(meter_color->red, meter_color->green, meter_color->blue);
+    model.power_color = meter_color;
+    lv_obj_set_style_arc_color(ui_PWMMeter, power_color, LV_PART_MAIN | LV_STATE_DEFAULT);
 }
 
 // M5 Hardware battery status
@@ -126,6 +151,7 @@ void set_voltage(uint16_t voltage)
         }
         set_batt_percent(percent);
     }
+    update_power();
 }
 
 void set_speed(uint16_t speed)
@@ -163,6 +189,7 @@ void set_current(int16_t amps)
         lv_color_t color = lv_color_hex(0xFFFFFF);
         lv_label_set_text(ui_CurrentValue, current_str);
     }
+    update_power();
 }
 
 void set_temp(uint16_t temp)
@@ -269,4 +296,12 @@ rgb_t *get_speed_color()
         model.speed_color = gradient_get_color(0);
     }
     return model.speed_color;
+}
+rgb_t *get_power_color()
+{
+    if (model.power_color == NULL)
+    {
+        model.power_color = gradient_get_color(0);
+    }
+    return model.power_color;
 }

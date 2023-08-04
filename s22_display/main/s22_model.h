@@ -37,6 +37,7 @@ extern "C"
     uint16_t get_batt_percent();
 
     rgb_t * get_speed_color();
+    rgb_t * get_power_color();
 
 #ifdef __cplusplus
 } /*extern "C"*/
