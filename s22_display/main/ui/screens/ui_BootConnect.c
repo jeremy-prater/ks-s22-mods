@@ -28,7 +28,7 @@ lv_obj_set_height( ui_ConnectingLabel, LV_SIZE_CONTENT);   /// 1
 lv_obj_set_x( ui_ConnectingLabel, 0 );
 lv_obj_set_y( ui_ConnectingLabel, 60 );
 lv_obj_set_align( ui_ConnectingLabel, LV_ALIGN_CENTER );
-lv_label_set_text(ui_ConnectingLabel,"Connecting to wheel");
+lv_label_set_text(ui_ConnectingLabel,"Connect to wheel");
 lv_obj_set_style_text_font(ui_ConnectingLabel, &lv_font_montserrat_26, LV_PART_MAIN| LV_STATE_DEFAULT);
 
 ui_ConnectingBLEName = lv_label_create(ui_BootConnect);
@@ -37,7 +37,7 @@ lv_obj_set_height( ui_ConnectingBLEName, LV_SIZE_CONTENT);   /// 1
 lv_obj_set_x( ui_ConnectingBLEName, 0 );
 lv_obj_set_y( ui_ConnectingBLEName, 95 );
 lv_obj_set_align( ui_ConnectingBLEName, LV_ALIGN_CENTER );
-lv_label_set_text(ui_ConnectingBLEName,"KSN-S22-xxxxx");
+lv_label_set_text(ui_ConnectingBLEName,"Scanning...");
 lv_obj_set_style_text_font(ui_ConnectingBLEName, &lv_font_montserrat_26, LV_PART_MAIN| LV_STATE_DEFAULT);
 
 ui_ConnectErrorPanel = lv_obj_create(ui_BootConnect);

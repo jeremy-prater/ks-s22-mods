@@ -4,6 +4,8 @@
 #include <esp_system.h>
 #include "esp_log.h"
 #include "string.h"
+#include "ble/client.h"
+#include "ui/ui.h"
 
 #define TAG "buttons"
 
@@ -45,6 +47,10 @@ static void button_left_event(button_t *btn, button_state_t state)
         break;
     case BUTTON_CLICKED:
         ESP_LOGI(TAG, "Left button clicked");
+        if (lv_scr_act() == ui_BootConnect)
+        {
+            ble_select_next_euc(true);
+        }
         break;
     case BUTTON_PRESSED_LONG:
         ESP_LOGI(TAG, "Left button long press");
@@ -62,6 +68,10 @@ static void button_middle_event(button_t *btn, button_state_t state)
         break;
     case BUTTON_CLICKED:
         ESP_LOGI(TAG, "Middle button clicked");
+        if (lv_scr_act() == ui_BootConnect)
+        {
+            ble_connect_selected_euc();
+        }
         break;
     case BUTTON_PRESSED_LONG:
         ESP_LOGI(TAG, "Middle button long press");
@@ -79,6 +89,11 @@ static void button_right_event(button_t *btn, button_state_t state)
         break;
     case BUTTON_CLICKED:
         ESP_LOGI(TAG, "Right button clicked");
+        if (lv_scr_act() == ui_BootConnect)
+        {
+            ble_select_next_euc(false);
+        }
+
         break;
     case BUTTON_PRESSED_LONG:
         ESP_LOGI(TAG, "Right button long press");

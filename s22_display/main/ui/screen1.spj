@@ -543,7 +543,7 @@
               {
                 "nid": 1168514757,
                 "strtype": "LABEL/Text",
-                "strval": "Connecting to wheel",
+                "strval": "Connect to wheel",
                 "InheritedType": 10
               },
               {
@@ -832,7 +832,7 @@
               {
                 "nid": -1822780439,
                 "strtype": "LABEL/Text",
-                "strval": "KSN-S22-xxxxx",
+                "strval": "Scanning...",
                 "InheritedType": 10
               },
               {
@@ -3042,7 +3042,6 @@
               {
                 "nid": -245656622,
                 "strtype": "ARC/Value",
-                "integer": 26,
                 "InheritedType": 6
               },
               {
@@ -3433,7 +3432,7 @@
               {
                 "nid": 30434175,
                 "strtype": "ARC/Value",
-                "integer": 22,
+                "integer": 100,
                 "InheritedType": 6
               },
               {
@@ -3832,7 +3831,7 @@
               {
                 "nid": -1046092532,
                 "strtype": "LABEL/Text",
-                "strval": "26",
+                "strval": "0",
                 "InheritedType": 10
               },
               {
@@ -4121,7 +4120,7 @@
               {
                 "nid": -1136707321,
                 "strtype": "LABEL/Text",
-                "strval": "88",
+                "strval": "0",
                 "InheritedType": 10
               },
               {
@@ -4988,7 +4987,7 @@
               {
                 "nid": -423726720,
                 "strtype": "LABEL/Text",
-                "strval": "78%",
+                "strval": "0%",
                 "InheritedType": 10
               },
               {
@@ -5879,7 +5878,7 @@
               {
                 "nid": -1037993170,
                 "strtype": "LABEL/Text",
-                "strval": "103",
+                "strval": "0",
                 "InheritedType": 10
               },
               {
@@ -6468,7 +6467,7 @@
               {
                 "nid": 1863595806,
                 "strtype": "LABEL/Text",
-                "strval": "20A",
+                "strval": "0A",
                 "InheritedType": 10
               },
               {
@@ -7058,7 +7057,7 @@
               {
                 "nid": -540343042,
                 "strtype": "LABEL/Text",
-                "strval": "113V",
+                "strval": "0V",
                 "InheritedType": 10
               },
               {
@@ -11561,7 +11560,7 @@
     "theme_color2": 0,
     "exportFolderPath": "/Users/jeremy.prater/src/ks-s22-mods/s22_display/main/ui",
     "projectExportFolderPath": "/Users/jeremy.prater/src/ks-s22-mods/s22_display/main/ui",
-    "backup_cnt": 44,
+    "backup_cnt": 46,
     "autosave_cnt": 0,
     "lvgl_version": "8.3.6",
     "callfuncsexport": "C_FILE",

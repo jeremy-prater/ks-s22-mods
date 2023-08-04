@@ -55,7 +55,6 @@ static void ble_central_host_task(void *param)
 
 void start_ble_scan()
 {
-    ESP_LOGI(TAG, "Scanning for S22 : %s", KS_S22_BLE_NAME);
     ble_s22_client_scan();
 }
 

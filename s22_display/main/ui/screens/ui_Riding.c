@@ -19,7 +19,6 @@ lv_obj_set_x( ui_SpeedMeter, 0 );
 lv_obj_set_y( ui_SpeedMeter, 40 );
 lv_obj_set_align( ui_SpeedMeter, LV_ALIGN_CENTER );
 lv_arc_set_range(ui_SpeedMeter, 0,44);
-lv_arc_set_value(ui_SpeedMeter, 26);
 lv_arc_set_bg_angles(ui_SpeedMeter,180,270);
 lv_obj_set_style_arc_width(ui_SpeedMeter, 30, LV_PART_MAIN| LV_STATE_DEFAULT);
 lv_obj_set_style_arc_rounded(ui_SpeedMeter, false, LV_PART_MAIN| LV_STATE_DEFAULT);
@@ -40,7 +39,7 @@ lv_obj_set_height( ui_PWMMeter, 320);
 lv_obj_set_x( ui_PWMMeter, 0 );
 lv_obj_set_y( ui_PWMMeter, 40 );
 lv_obj_set_align( ui_PWMMeter, LV_ALIGN_CENTER );
-lv_arc_set_value(ui_PWMMeter, 22);
+lv_arc_set_value(ui_PWMMeter, 100);
 lv_arc_set_bg_angles(ui_PWMMeter,270,0);
 lv_obj_set_style_arc_color(ui_PWMMeter, lv_color_hex(0xFF8940), LV_PART_MAIN | LV_STATE_DEFAULT );
 lv_obj_set_style_arc_opa(ui_PWMMeter, 255, LV_PART_MAIN| LV_STATE_DEFAULT);
@@ -63,7 +62,7 @@ lv_obj_set_height( ui_SpeedValue, LV_SIZE_CONTENT);   /// 1
 lv_obj_set_x( ui_SpeedValue, -60 );
 lv_obj_set_y( ui_SpeedValue, -20 );
 lv_obj_set_align( ui_SpeedValue, LV_ALIGN_CENTER );
-lv_label_set_text(ui_SpeedValue,"26");
+lv_label_set_text(ui_SpeedValue,"0");
 lv_obj_set_style_text_font(ui_SpeedValue, &lv_font_montserrat_48, LV_PART_MAIN| LV_STATE_DEFAULT);
 
 ui_PWMValue = lv_label_create(ui_Riding);
@@ -72,7 +71,7 @@ lv_obj_set_height( ui_PWMValue, LV_SIZE_CONTENT);   /// 1
 lv_obj_set_x( ui_PWMValue, 60 );
 lv_obj_set_y( ui_PWMValue, -20 );
 lv_obj_set_align( ui_PWMValue, LV_ALIGN_CENTER );
-lv_label_set_text(ui_PWMValue,"88");
+lv_label_set_text(ui_PWMValue,"0");
 lv_obj_set_style_text_font(ui_PWMValue, &lv_font_montserrat_48, LV_PART_MAIN| LV_STATE_DEFAULT);
 
 ui_SpeedLabel = lv_label_create(ui_Riding);
@@ -99,7 +98,7 @@ lv_obj_set_height( ui_BatteryValue, LV_SIZE_CONTENT);   /// 1
 lv_obj_set_x( ui_BatteryValue, -130 );
 lv_obj_set_y( ui_BatteryValue, 105 );
 lv_obj_set_align( ui_BatteryValue, LV_ALIGN_CENTER );
-lv_label_set_text(ui_BatteryValue,"78%");
+lv_label_set_text(ui_BatteryValue,"0%");
 lv_obj_set_style_text_font(ui_BatteryValue, &lv_font_montserrat_24, LV_PART_MAIN| LV_STATE_DEFAULT);
 
 ui_BatteryIcon = lv_label_create(ui_Riding);
@@ -130,7 +129,7 @@ lv_obj_set_height( ui_TempValue, LV_SIZE_CONTENT);   /// 1
 lv_obj_set_x( ui_TempValue, 130 );
 lv_obj_set_y( ui_TempValue, 105 );
 lv_obj_set_align( ui_TempValue, LV_ALIGN_CENTER );
-lv_label_set_text(ui_TempValue,"103");
+lv_label_set_text(ui_TempValue,"0");
 lv_obj_set_style_text_font(ui_TempValue, &lv_font_montserrat_24, LV_PART_MAIN| LV_STATE_DEFAULT);
 
 ui_CurrentIcon = lv_label_create(ui_Riding);
@@ -150,7 +149,7 @@ lv_obj_set_height( ui_CurrentValue, LV_SIZE_CONTENT);   /// 1
 lv_obj_set_x( ui_CurrentValue, 45 );
 lv_obj_set_y( ui_CurrentValue, 105 );
 lv_obj_set_align( ui_CurrentValue, LV_ALIGN_CENTER );
-lv_label_set_text(ui_CurrentValue,"20A");
+lv_label_set_text(ui_CurrentValue,"0A");
 lv_obj_set_style_text_font(ui_CurrentValue, &lv_font_montserrat_24, LV_PART_MAIN| LV_STATE_DEFAULT);
 
 ui_VoltIcon = lv_label_create(ui_Riding);
@@ -170,7 +169,7 @@ lv_obj_set_height( ui_VoltLabel, LV_SIZE_CONTENT);   /// 1
 lv_obj_set_x( ui_VoltLabel, -45 );
 lv_obj_set_y( ui_VoltLabel, 105 );
 lv_obj_set_align( ui_VoltLabel, LV_ALIGN_CENTER );
-lv_label_set_text(ui_VoltLabel,"113V");
+lv_label_set_text(ui_VoltLabel,"0V");
 lv_obj_set_style_text_font(ui_VoltLabel, &lv_font_montserrat_24, LV_PART_MAIN| LV_STATE_DEFAULT);
 
 ui_M5Battery1Charging = lv_label_create(ui_Riding);

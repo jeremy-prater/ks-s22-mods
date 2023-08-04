@@ -15,6 +15,5 @@ void OnBootConnectLoaded(lv_event_t *e)
 {
 	// Connect to wheel
 	ESP_LOGI(BOOT_CONNECT_TAG, "OnBootConnectLoaded");
-	lv_label_set_text(ui_ConnectingBLEName, KS_S22_BLE_NAME);
 	start_ble_scan();
 }

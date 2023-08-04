@@ -17,6 +17,8 @@
 #define TAG "ble:client"
 
 static int ble_s22_client_gap_event(struct ble_gap_event *event, void *arg);
+static void ble_s22_client_connect(const ble_addr_t addr);
+
 QueueHandle_t spp_common_uart_queue = NULL;
 
 uint16_t attribute_handle[CONFIG_BT_NIMBLE_MAX_CONNECTIONS + 1];
@@ -25,10 +27,13 @@ static ble_addr_t connected_addr[CONFIG_BT_NIMBLE_MAX_CONNECTIONS + 1];
 typedef struct
 {
     ble_addr_t address;
-    const char * name;
+    const char *name;
 } discovered_euc_t;
 
-static discovered_euc_t* discovered_eucs[MAX_NUM_DISCOVERED_EUC];
+static SemaphoreHandle_t discovered_euc_lock = NULL;
+static discovered_euc_t *discovered_eucs[MAX_NUM_DISCOVERED_EUC];
+static uint8_t current_euc;
+static bool discovered_first_euc = false;
 
 static void
 goto_riding_screen()
@@ -116,6 +121,86 @@ ble_s22_client_on_disc_complete(const struct peer *peer, int status, void *arg)
 #endif
 }
 
+static void ble_clear_all_known_eucs()
+{
+    xSemaphoreTake(discovered_euc_lock, portMAX_DELAY);
+    for (uint8_t index = 0; index < MAX_NUM_DISCOVERED_EUC; index++)
+    {
+        if (discovered_eucs[index] != NULL)
+        {
+            free(discovered_eucs[index]->name);
+            free(discovered_eucs[index]);
+            discovered_eucs[index] = NULL;
+        }
+    }
+    xSemaphoreGive(discovered_euc_lock);
+}
+
+static void ble_add_new_euc(discovered_euc_t *new_euc)
+{
+    xSemaphoreTake(discovered_euc_lock, portMAX_DELAY);
+    for (uint8_t index = 0; index < MAX_NUM_DISCOVERED_EUC; index++)
+    {
+        if (discovered_eucs[index] == NULL)
+        {
+            ESP_LOGI(TAG, "Adding EUC : %s", new_euc->name);
+            discovered_eucs[index] = malloc(sizeof(discovered_euc_t));
+            memcpy(discovered_eucs[index], new_euc, sizeof(discovered_euc_t));
+            break;
+        }
+    }
+    xSemaphoreGive(discovered_euc_lock);
+
+    if (discovered_first_euc == false)
+    {
+        discovered_first_euc = true;
+        ble_select_next_euc(true);
+    }
+}
+
+void ble_select_next_euc(bool direction)
+{
+    xSemaphoreTake(discovered_euc_lock, portMAX_DELAY);
+    for (uint8_t index = 0; index < MAX_NUM_DISCOVERED_EUC; index++)
+    {
+        if (direction)
+        {
+            current_euc++;
+            if (current_euc == MAX_NUM_DISCOVERED_EUC)
+            {
+                current_euc = 0;
+            }
+        }
+        else
+        {
+            current_euc--;
+            if (current_euc == 0xFF)
+            {
+                current_euc = MAX_NUM_DISCOVERED_EUC - 1;
+            }
+        }
+        if (discovered_eucs[current_euc] != NULL)
+        {
+            // Update UI
+            lv_label_set_text(ui_ConnectingBLEName, discovered_eucs[current_euc]->name);
+            ESP_LOGI(TAG, "Selected EUC : %s", discovered_eucs[current_euc]->name);
+
+            break;
+        }
+    }
+    xSemaphoreGive(discovered_euc_lock);
+}
+
+void ble_connect_selected_euc()
+{
+    xSemaphoreTake(discovered_euc_lock, portMAX_DELAY);
+
+    ESP_LOGI(TAG, "Connecting to wheel : %s", discovered_eucs[current_euc]->name);
+
+    ble_s22_client_connect(discovered_eucs[current_euc]->address);    
+
+    xSemaphoreGive(discovered_euc_lock);
+}
 /**
  * Initiates the GAP general discovery procedure.
  */
@@ -207,18 +292,6 @@ ble_s22_client_should_connect(const struct ble_gap_disc_desc *disc)
         ESP_LOGW(TAG, "ble_hs_adv_parse_fields failed : %d", rc);
     }
 
-    if (fields.name != NULL && fields.name_is_complete != 0)
-    {
-        char *name = malloc(fields.name_len + 1);
-        strncpy(name, (const char *)fields.name, fields.name_len);
-        name[fields.name_len] = 0x00;
-        ESP_LOGI(TAG, "Found BLE : %s", name);
-        size_t len = strnlen(name, strlen(KS_S22_BLE_NAME));
-        int match = strncmp(name, KS_S22_BLE_NAME, len);
-        free(name);
-        return match == 0;
-    }
-
     // ESP_LOGI(TAG, "uuid count : 128-bit %d : 32-bit %d : 16-bit %d", fields.num_uuids128, fields.num_uuids32, fields.num_uuids16);
 
     // for (i = 0; i < fields.num_uuids16; i++)
@@ -233,22 +306,11 @@ ble_s22_client_should_connect(const struct ble_gap_disc_desc *disc)
     return 1;
 }
 
-/**
- * Connects to the sender of the specified advertisement of it looks
- * interesting.  A device is "interesting" if it advertises connectability and
- * support for the Alert Notification service.
- */
 static void
-ble_s22_client_connect_if_interesting(const struct ble_gap_disc_desc *disc)
+ble_s22_client_connect(const ble_addr_t addr)
 {
     uint8_t own_addr_type;
     int rc;
-
-    /* Don't do anything if we don't care about this advertiser. */
-    if (!ble_s22_client_should_connect(disc))
-    {
-        return;
-    }
 
     /* Scanning must be stopped before a connection can be initiated. */
     rc = ble_gap_disc_cancel();
@@ -270,13 +332,13 @@ ble_s22_client_connect_if_interesting(const struct ble_gap_disc_desc *disc)
      * timeout.
      */
 
-    rc = ble_gap_connect(own_addr_type, &disc->addr, 30000, NULL,
+    rc = ble_gap_connect(own_addr_type, &addr, 30000, NULL,
                          ble_s22_client_gap_event, NULL);
     if (rc != 0)
     {
         MODLOG_DFLT(ERROR, "Error: Failed to connect to device; addr_type=%d "
                            "addr=%s; rc=%d\n",
-                    disc->addr.type, addr_str(disc->addr.val), rc);
+                    addr.type, addr_str(addr.val), rc);
         return;
     }
 }
@@ -328,10 +390,13 @@ ble_s22_client_gap_event(struct ble_gap_event *event, void *arg)
             memcpy(ble_name, fields.name, fields.name_len);
             ble_name[fields.name_len] = 0x00;
             ESP_LOGI(TAG, "Found BLE Device : %s", ble_name);
+            discovered_euc_t new_euc = {
+                .name = ble_name,
+                .address = event->disc.addr,
+            };
+            ble_add_new_euc(&new_euc);
         }
 
-        /* Try to connect to the advertiser if it looks interesting. */
-        ble_s22_client_connect_if_interesting(&event->disc);
         return 0;
 
     case BLE_GAP_EVENT_CONNECT:
@@ -444,6 +509,11 @@ void ble_s22_client_on_sync(void)
     /* Make sure we have proper identity address set (public preferred) */
     rc = ble_hs_util_ensure_addr(0);
     assert(rc == 0);
+
+    if (discovered_euc_lock == NULL)
+    {
+        discovered_euc_lock = xSemaphoreCreateMutex();
+    }
 }
 
 // void ble_client_uart_task(void *pvParameters)
