@@ -256,3 +256,31 @@ CS - GPIO A4
 ### Timer 4 - ??
 
 ### GPIO - ??
+
+## M5 Stack Fire display
+
+- Currently a work in progress
+
+- Steps to install (linux or mac os)
+
+1. go to the display code directory
+```
+cd s22_display
+```
+2. Clone submodule dependencies
+```
+git submodule update --init --recursive
+```
+3. Install the ESP32 toolchain
+```
+./esp-idf/install.sh
+```
+4. Setup the ESP32 environment
+```
+source ./esp-idf/export.sh
+```
+5. Plug in USB-C cable to fire stack
+6. Build + Flash + Monitor logs
+```
+idf.py build flash monitor
+```
