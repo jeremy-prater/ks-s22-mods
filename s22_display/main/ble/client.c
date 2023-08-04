@@ -22,7 +22,16 @@ QueueHandle_t spp_common_uart_queue = NULL;
 uint16_t attribute_handle[CONFIG_BT_NIMBLE_MAX_CONNECTIONS + 1];
 static ble_addr_t connected_addr[CONFIG_BT_NIMBLE_MAX_CONNECTIONS + 1];
 
-static void goto_riding_screen()
+typedef struct
+{
+    ble_addr_t address;
+    const char * name;
+} discovered_euc_t;
+
+static discovered_euc_t* discovered_eucs[MAX_NUM_DISCOVERED_EUC];
+
+static void
+goto_riding_screen()
 {
     lv_event_t event;
     event.code = LV_EVENT_READY;
@@ -313,9 +322,9 @@ ble_s22_client_gap_event(struct ble_gap_event *event, void *arg)
         /* An advertisment report was received during GAP discovery. */
         print_adv_fields(&fields);
 
-        if (fields.name_len > 0 && strncmp((const char*)fields.name, "KSN-", 4) == 0)
+        if (fields.name_len > 0 && strncmp((const char *)fields.name, "KSN-", 4) == 0)
         {
-            char * ble_name = malloc(fields.name_len + 1);
+            char *ble_name = malloc(fields.name_len + 1);
             memcpy(ble_name, fields.name, fields.name_len);
             ble_name[fields.name_len] = 0x00;
             ESP_LOGI(TAG, "Found BLE Device : %s", ble_name);

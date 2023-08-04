@@ -9,6 +9,8 @@ extern "C"
 #include "nimble/ble.h"
 #include "ble/packet.h"
 
+#define MAX_NUM_DISCOVERED_EUC 16
+
 /* 16 Bit SPP Service UUID */
 #define GATT_SPP_SVC_UUID 0xFFE0
 
