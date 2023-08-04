@@ -62,7 +62,7 @@ static void led_task(void *pvParameters)
 
         leds_update();
 
-        vTaskDelay(pdMS_TO_TICKS(100));
+        vTaskDelay(pdMS_TO_TICKS(250));
     }
 }
 
