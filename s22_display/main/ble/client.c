@@ -249,60 +249,60 @@ void ble_s22_client_scan(void)
 static int
 ble_s22_client_should_connect(const struct ble_gap_disc_desc *disc)
 {
-    struct ble_hs_adv_fields fields;
-    int rc;
-    int i;
+    // struct ble_hs_adv_fields fields;
+    // int rc;
+    // int i;
 
-    rc = ble_addr_cmp(&disc->addr, (const ble_addr_t *)&s22_addr_real);
-    if (rc != 0)
-    {
-        return 0;
-    }
-    ESP_LOGI(TAG, "addr_type=%d addr=%02x:%02x:%02x:%02x:%02x:%02x -> %d",
-             disc->addr.type,
-             disc->addr.val[5],
-             disc->addr.val[4],
-             disc->addr.val[3],
-             disc->addr.val[2],
-             disc->addr.val[1],
-             disc->addr.val[0],
-             rc);
-
-    /* Check if device is already connected or not */
-    for (i = 0; i <= CONFIG_BT_NIMBLE_MAX_CONNECTIONS; i++)
-    {
-        if (memcmp(&connected_addr[i].val, disc->addr.val, PEER_ADDR_VAL_SIZE) == 0)
-        {
-            MODLOG_DFLT(DEBUG, "Device already connected");
-            return 0;
-        }
-    }
-
-    /* The device has to be advertising connectability. */
-    if (disc->event_type != BLE_HCI_ADV_RPT_EVTYPE_ADV_IND &&
-        disc->event_type != BLE_HCI_ADV_RPT_EVTYPE_DIR_IND)
-    {
-        // ESP_LOGW(TAG, "unknown scan type : %d", disc->event_type);
-        // return 0;
-    }
-
-    rc = ble_hs_adv_parse_fields(&fields, disc->data, disc->length_data);
-    if (rc != 0)
-    {
-        ESP_LOGW(TAG, "ble_hs_adv_parse_fields failed : %d", rc);
-    }
-
-    // ESP_LOGI(TAG, "uuid count : 128-bit %d : 32-bit %d : 16-bit %d", fields.num_uuids128, fields.num_uuids32, fields.num_uuids16);
-
-    // for (i = 0; i < fields.num_uuids16; i++)
+    // rc = ble_addr_cmp(&disc->addr, (const ble_addr_t *)&s22_addr_real);
+    // if (rc != 0)
     // {
-    //     uint16_t uuid = ble_uuid_u16(&fields.uuids16[i].u);
-    //     ESP_LOGI(TAG, "UUID %08x %08x", uuid, GATT_SPP_SVC_UUID);
-    //     if (uuid == GATT_SPP_SVC_UUID)
+    //     return 0;
+    // }
+    // ESP_LOGI(TAG, "addr_type=%d addr=%02x:%02x:%02x:%02x:%02x:%02x -> %d",
+    //          disc->addr.type,
+    //          disc->addr.val[5],
+    //          disc->addr.val[4],
+    //          disc->addr.val[3],
+    //          disc->addr.val[2],
+    //          disc->addr.val[1],
+    //          disc->addr.val[0],
+    //          rc);
+
+    // /* Check if device is already connected or not */
+    // for (i = 0; i <= CONFIG_BT_NIMBLE_MAX_CONNECTIONS; i++)
+    // {
+    //     if (memcmp(&connected_addr[i].val, disc->addr.val, PEER_ADDR_VAL_SIZE) == 0)
     //     {
-    //         return 1;
+    //         MODLOG_DFLT(DEBUG, "Device already connected");
+    //         return 0;
     //     }
     // }
+
+    // /* The device has to be advertising connectability. */
+    // if (disc->event_type != BLE_HCI_ADV_RPT_EVTYPE_ADV_IND &&
+    //     disc->event_type != BLE_HCI_ADV_RPT_EVTYPE_DIR_IND)
+    // {
+    //     // ESP_LOGW(TAG, "unknown scan type : %d", disc->event_type);
+    //     // return 0;
+    // }
+
+    // rc = ble_hs_adv_parse_fields(&fields, disc->data, disc->length_data);
+    // if (rc != 0)
+    // {
+    //     ESP_LOGW(TAG, "ble_hs_adv_parse_fields failed : %d", rc);
+    // }
+
+    // // ESP_LOGI(TAG, "uuid count : 128-bit %d : 32-bit %d : 16-bit %d", fields.num_uuids128, fields.num_uuids32, fields.num_uuids16);
+
+    // // for (i = 0; i < fields.num_uuids16; i++)
+    // // {
+    // //     uint16_t uuid = ble_uuid_u16(&fields.uuids16[i].u);
+    // //     ESP_LOGI(TAG, "UUID %08x %08x", uuid, GATT_SPP_SVC_UUID);
+    // //     if (uuid == GATT_SPP_SVC_UUID)
+    // //     {
+    // //         return 1;
+    // //     }
+    // // }
     return 1;
 }
 

@@ -21,6 +21,7 @@ SET(BLE_CLIENT_SOURCES
 )
 
 SET(SOURCES
+    gradient.c
     battery.c
     buttons.c
     leds.c
@@ -33,7 +34,7 @@ SET(SOURCES
 idf_component_register(
     SRCS ${SOURCES} ${UI_SOURCES} ${BLE_CLIENT_SOURCES}
     INCLUDE_DIRS .
-    REQUIRES lvgl lvgl_esp32_drivers driver nvs_flash bt led_strip spiffs button
+    REQUIRES lvgl lvgl_esp32_drivers driver nvs_flash bt led_strip spiffs button color
 )
 
 spiffs_create_partition_image(audio audio FLASH_IN_PROJECT)

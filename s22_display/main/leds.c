@@ -3,6 +3,7 @@
 #include <freertos/task.h>
 #include <esp_system.h>
 #include "esp_log.h"
+#include "s22_model.h"
 
 #define TAG "M5_LEDS"
 
@@ -133,5 +134,11 @@ static void leds_scene_ble_scan(TickType_t delta_time)
 
 static void leds_scene_riding(TickType_t delta_time)
 {
-    memset(led_colors, 0x80, sizeof(rgb_t) * NUM_M5_LEDS);
+    rgb_t * speed_color = get_speed_color();
+    rgb_t * pwm_color = speed_color;
+    for (uint8_t index = 0; index < 5; index++)
+    {
+        leds_set_color(index, *speed_color);
+        leds_set_color(index + 5, *pwm_color);
+    }
 }

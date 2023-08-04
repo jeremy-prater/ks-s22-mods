@@ -27,10 +27,6 @@ extern "C"
     void ble_select_next_euc(bool direction);
     void ble_connect_selected_euc();
 
-    extern const ble_addr_t s22_addr_real;
-    extern const ble_addr_t s22_addr_bad_board;
-    extern const ble_addr_t s22_addr_sim;
-
 #ifdef __cplusplus
 } /*extern "C"*/
 #endif

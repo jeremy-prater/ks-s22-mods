@@ -22,11 +22,13 @@
 #include "driver/gpio.h"
 #include "nvs_flash.h"
 #include "s22_display.h"
+#include "s22_model.h"
 #include "leds.h"
 #include "sound.h"
 #include "spiffs.h"
 #include "buttons.h"
 #include "battery.h"
+#include "gradient.h"
 
 #include "lvgl.h"
 #include "lvgl_helpers.h"
@@ -46,36 +48,6 @@
 static void lv_tick_task(void *arg);
 static void guiTask(void *pvParameter);
 static void create_ui_application(void);
-
-const ble_addr_t s22_addr_real = {
-    .type = BLE_ADDR_PUBLIC,
-    .val = {
-        0x39,
-        0xE3,
-        0x01,
-        0xC3,
-        0xC5,
-        0xC2}};
-
-const ble_addr_t s22_addr_bad_board = {
-    .type = BLE_ADDR_PUBLIC,
-    .val = {
-        0x76,
-        0xF1,
-        0x01,
-        0xC3,
-        0xC5,
-        0xC2}};
-
-const ble_addr_t s22_addr_sim = {
-    .type = BLE_ADDR_PUBLIC,
-    .val = {
-        0x13,
-        0x71,
-        0xDA,
-        0x7D,
-        0x1A,
-        0x00}};
 
 void app_main()
 {
@@ -97,9 +69,11 @@ void app_main()
     // Party time
     pmic_init();
     leds_init();
+    gradient_init();
     spiffs_init("audio");
     sound_init();
     buttons_init();
+    model_init();
     // sound_play("/audio/power_on.pcm");
     // sound_play("/audio/rick.pcm");
 }

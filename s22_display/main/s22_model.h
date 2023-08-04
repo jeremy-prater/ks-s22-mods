@@ -3,11 +3,14 @@
 
 #include "stdint.h"
 #include "battery.h"
+#include "rgb.h"
 
 #ifdef __cplusplus
 extern "C"
 {
 #endif
+
+    void model_init();
 
     // M5 Hardware battery status
     void set_m5_charging(m5_battery_charging_t charging);
@@ -32,6 +35,8 @@ extern "C"
     uint16_t get_temp();
     uint16_t get_pwm();
     uint16_t get_batt_percent();
+
+    rgb_t * get_speed_color();
 
 #ifdef __cplusplus
 } /*extern "C"*/

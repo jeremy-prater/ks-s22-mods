@@ -2,6 +2,7 @@
 #include "ui/ui.h"
 #include "esp_log.h"
 #include "icons.h"
+#include "gradient.h"
 
 #define TAG "s22-model"
 
@@ -9,6 +10,7 @@ typedef struct
 {
     uint16_t voltage;
     uint16_t speed;
+    rgb_t *speed_color;
     int16_t current;
     uint16_t temp;
     uint16_t battery_percent;
@@ -16,6 +18,17 @@ typedef struct
 } s22_model;
 
 static s22_model model;
+
+void model_init()
+{
+    model.voltage = 0xFFFF;
+    model.speed = 0xFFFF;
+    model.speed_color = gradient_get_color(0);
+    model.current = 0xFFFF;
+    model.temp = 0xFFFF;
+    model.battery_percent = 0xFFFF;
+    model.pwm = 0xFFFF;
+}
 
 // M5 Hardware battery status
 void set_m5_charging(m5_battery_charging_t charging)
@@ -37,9 +50,6 @@ void set_m5_charging(m5_battery_charging_t charging)
             lv_obj_add_flag(ui_M5Battery1Charging, LV_OBJ_FLAG_HIDDEN);
             lv_obj_add_flag(ui_M5Battery2Charging, LV_OBJ_FLAG_HIDDEN);
         }
-        lv_event_send(ui_M5Battery0Charging, LV_EVENT_REFRESH, NULL);
-        lv_event_send(ui_M5Battery1Charging, LV_EVENT_REFRESH, NULL);
-        lv_event_send(ui_M5Battery2Charging, LV_EVENT_REFRESH, NULL);
     }
 }
 
@@ -61,10 +71,6 @@ void set_m5_charging_full(m5_battery_full_t full)
             lv_obj_set_style_text_color(ui_M5Battery1Charging, lv_color_hex(0x00FF08), LV_PART_MAIN | LV_STATE_DEFAULT);
             lv_obj_set_style_text_color(ui_M5Battery2Charging, lv_color_hex(0x00FF08), LV_PART_MAIN | LV_STATE_DEFAULT);
         }
-
-        lv_event_send(ui_M5Battery0Charging, LV_EVENT_REFRESH, NULL);
-        lv_event_send(ui_M5Battery1Charging, LV_EVENT_REFRESH, NULL);
-        lv_event_send(ui_M5Battery2Charging, LV_EVENT_REFRESH, NULL);
     }
 }
 
@@ -97,10 +103,6 @@ void set_m5_battery_percent(m5_battery_level_t level)
         lv_label_set_text(ui_M5Battery0, level_icon);
         lv_label_set_text(ui_M5Battery1, level_icon);
         lv_label_set_text(ui_M5Battery2, level_icon);
-
-        lv_event_send(ui_M5Battery0, LV_EVENT_REFRESH, NULL);
-        lv_event_send(ui_M5Battery1, LV_EVENT_REFRESH, NULL);
-        lv_event_send(ui_M5Battery2, LV_EVENT_REFRESH, NULL);
     }
 }
 
@@ -113,11 +115,8 @@ void set_voltage(uint16_t voltage)
         char voltage_str[5];
         itoa(voltage, voltage_str, 10);
         strcat(voltage_str, "V");
-        // Generate color gradient
-        lv_color_t color = lv_color_hex(0xFFFFFF);
-        lv_label_set_text(ui_VoltLabel, voltage_str);
 
-        lv_event_send(ui_VoltLabel, LV_EVENT_REFRESH, NULL);
+        lv_label_set_text(ui_VoltLabel, voltage_str);
 
         float icv = (voltage / 30.0) - 3.0;
         uint8_t percent = 0;
@@ -137,13 +136,18 @@ void set_speed(uint16_t speed)
         char speed_str[4];
         itoa(speed, speed_str, 10);
         // Generate color gradient
-        lv_color_t color = lv_color_hex(0xFFFFFF);
+        uint16_t speed_color = speed;
+        if (speed_color > 44)
+        {
+            speed_color = 44;
+        }
+        uint8_t color_index = ((speed_color / 44.0f) * 0xFF);
+        rgb_t *new_color = gradient_get_color(color_index);
+        lv_color_t color = lv_color_make(new_color->red, new_color->green, new_color->blue);
+        model.speed_color = new_color;
         lv_arc_set_value(ui_SpeedMeter, speed);
         lv_obj_set_style_arc_color(ui_SpeedMeter, color, LV_PART_INDICATOR | LV_STATE_DEFAULT);
         lv_label_set_text(ui_SpeedValue, speed_str);
-
-        lv_event_send(ui_SpeedMeter, LV_EVENT_REFRESH, NULL);
-        lv_event_send(ui_SpeedValue, LV_EVENT_REFRESH, NULL);
     }
 }
 
@@ -158,8 +162,6 @@ void set_current(int16_t amps)
         // Generate color gradient
         lv_color_t color = lv_color_hex(0xFFFFFF);
         lv_label_set_text(ui_CurrentValue, current_str);
-
-        lv_event_send(ui_CurrentValue, LV_EVENT_REFRESH, NULL);
     }
 }
 
@@ -175,8 +177,6 @@ void set_temp(uint16_t temp)
         // Generate color gradient
         lv_color_t color = lv_color_hex(0xFFFFFF);
         lv_label_set_text(ui_TempValue, temp_str);
-
-        lv_event_send(ui_TempValue, LV_EVENT_REFRESH, NULL);
     }
 }
 
@@ -193,8 +193,6 @@ void set_pwm(uint16_t pwm)
         lv_arc_set_value(ui_PWMMeter, 100 - pwm);
         lv_obj_set_style_arc_color(ui_PWMMeter, color, LV_PART_MAIN | LV_STATE_DEFAULT);
         lv_label_set_text(ui_PWMValue, pwm_str);
-
-        lv_event_send(ui_PWMValue, LV_EVENT_REFRESH, NULL);
     }
 }
 
@@ -207,10 +205,34 @@ void set_batt_percent(uint16_t batt_percent)
         itoa(batt_percent, batt_str, 10);
         strcat(batt_str, "%");
         // Generate color gradient
-        lv_color_t color = lv_color_hex(0xFFFFFF);
         lv_label_set_text(ui_BatteryValue, batt_str);
 
-        lv_event_send(ui_BatteryValue, LV_EVENT_REFRESH, NULL);
+        rgb_t *battery_color = gradient_get_color((100 - batt_percent) * 2.55F);
+        lv_color_t color = lv_color_make(battery_color->red, battery_color->green, battery_color->blue);
+        lv_obj_set_style_text_color(ui_BatteryIcon, color, LV_PART_MAIN | LV_STATE_DEFAULT);
+        lv_obj_set_style_text_color(ui_VoltIcon, color, LV_PART_MAIN | LV_STATE_DEFAULT);
+        const char *level_icon;
+        if (batt_percent < 20)
+        {
+            level_icon = ICON_BATTERY_EMPTY;
+        }
+        else if (batt_percent < 40)
+        {
+            level_icon = ICON_BATTERY_QUARTER;
+        }
+        else if (batt_percent < 60)
+        {
+            level_icon = ICON_BATTERY_HALF;
+        }
+        else if (batt_percent < 80)
+        {
+            level_icon = ICON_BATTERY_THREE_QUARTER;
+        }
+        else
+        {
+            level_icon = ICON_BATTERY_FULL;
+        }
+        lv_label_set_text(ui_BatteryIcon, level_icon);
     }
 }
 
@@ -239,4 +261,12 @@ uint16_t get_pwm()
 uint16_t get_battery_percent()
 {
     return model.battery_percent;
+}
+rgb_t *get_speed_color()
+{
+    if (model.speed_color == NULL)
+    {
+        model.speed_color = gradient_get_color(0);
+    }
+    return model.speed_color;
 }
