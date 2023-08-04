@@ -28,6 +28,7 @@ extern "C"
     void set_pwm(uint16_t pwm);
     void set_batt_percent(uint16_t batt_percent);
 
+    void update_power();
     // Getters
     uint16_t get_voltage();
     uint16_t get_speed();

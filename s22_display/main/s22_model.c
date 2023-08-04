@@ -34,27 +34,6 @@ void model_init()
     model.pwm = 0xFFFF;
 }
 
-static void update_power()
-{
-    model.power = model.voltage * model.current;
-
-    char power_str[5];
-    itoa(model.power, power_str, 10);
-
-    int16_t display_power = abs(model.power);
-    if (display_power > 3300)
-    {
-        display_power = 3300;
-    }
-    uint8_t meter_range = display_power / 33.0f;
-    rgb_t *meter_color = gradient_get_color(meter_range * 2.55f);
-    lv_label_set_text(ui_PWMValue, power_str);
-    lv_arc_set_value(ui_PWMMeter, 100 - meter_range);
-    lv_color_t power_color = lv_color_make(meter_color->red, meter_color->green, meter_color->blue);
-    model.power_color = meter_color;
-    lv_obj_set_style_arc_color(ui_PWMMeter, power_color, LV_PART_MAIN | LV_STATE_DEFAULT);
-}
-
 // M5 Hardware battery status
 void set_m5_charging(m5_battery_charging_t charging)
 {
@@ -151,7 +130,6 @@ void set_voltage(uint16_t voltage)
         }
         set_batt_percent(percent);
     }
-    update_power();
 }
 
 void set_speed(uint16_t speed)
@@ -189,7 +167,6 @@ void set_current(int16_t amps)
         lv_color_t color = lv_color_hex(0xFFFFFF);
         lv_label_set_text(ui_CurrentValue, current_str);
     }
-    update_power();
 }
 
 void set_temp(uint16_t temp)
@@ -260,6 +237,32 @@ void set_batt_percent(uint16_t batt_percent)
             level_icon = ICON_BATTERY_FULL;
         }
         lv_label_set_text(ui_BatteryIcon, level_icon);
+    }
+}
+
+void update_power()
+{
+    int16_t new_power = model.voltage * model.current;
+
+    if (model.power != new_power)
+    {
+        model.power = new_power;
+
+        char power_str[5];
+        itoa(model.power, power_str, 10);
+
+        int16_t display_power = abs(model.power);
+        if (display_power > 3300)
+        {
+            display_power = 3300;
+        }
+        uint8_t meter_range = display_power / 33.0f;
+        rgb_t *meter_color = gradient_get_color(meter_range * 2.55f);
+        lv_label_set_text(ui_PWMValue, power_str);
+        lv_arc_set_value(ui_PWMMeter, 100 - meter_range);
+        lv_color_t power_color = lv_color_make(meter_color->red, meter_color->green, meter_color->blue);
+        model.power_color = meter_color;
+        lv_obj_set_style_arc_color(ui_PWMMeter, power_color, LV_PART_MAIN | LV_STATE_DEFAULT);
     }
 }
 

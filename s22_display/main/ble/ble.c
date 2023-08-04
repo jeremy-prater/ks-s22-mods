@@ -98,6 +98,7 @@ static void wheel_event_task(void *param)
                 set_voltage(voltage);
                 set_temp(temp);
                 set_current(current);
+                update_power();
                 break;
             case 0xB9:
                 // ESP_LOGI(TAG, "Got DUT");
