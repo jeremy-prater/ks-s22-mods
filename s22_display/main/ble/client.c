@@ -195,10 +195,15 @@ void ble_connect_selected_euc()
 {
     xSemaphoreTake(discovered_euc_lock, portMAX_DELAY);
 
-    ESP_LOGI(TAG, "Connecting to wheel : %s", discovered_eucs[current_euc]->name);
-
-    ble_s22_client_connect(discovered_eucs[current_euc]->address);    
-
+    if (discovered_eucs[current_euc] == NULL)
+    {
+        ESP_LOGW(TAG, "No discovered EUC to connect to!");
+    }
+    else
+    {
+        ESP_LOGI(TAG, "Connecting to wheel : %s", discovered_eucs[current_euc]->name);
+        ble_s22_client_connect(discovered_eucs[current_euc]->address);
+    }
     xSemaphoreGive(discovered_euc_lock);
 }
 /**

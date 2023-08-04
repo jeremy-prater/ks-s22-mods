@@ -123,7 +123,7 @@ void set_voltage(uint16_t voltage)
 
         lv_label_set_text(ui_VoltLabel, voltage_str);
 
-        float icv = (voltage_100 / 30.0) - 3.0;
+        float icv = (voltage / 3000.0) - 3.0;
         uint8_t percent = 0;
         if (icv > 0.0)
         {
