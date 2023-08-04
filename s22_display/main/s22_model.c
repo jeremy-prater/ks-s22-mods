@@ -117,12 +117,13 @@ void set_voltage(uint16_t voltage)
     {
         model.voltage = voltage;
         char voltage_str[5];
-        itoa(voltage, voltage_str, 10);
+        uint8_t voltage_100 = voltage / 100;
+        itoa(voltage_100, voltage_str, 10);
         strcat(voltage_str, "V");
 
         lv_label_set_text(ui_VoltLabel, voltage_str);
 
-        float icv = (voltage / 30.0) - 3.0;
+        float icv = (voltage_100 / 30.0) - 3.0;
         uint8_t percent = 0;
         if (icv > 0.0)
         {
@@ -138,9 +139,10 @@ void set_speed(uint16_t speed)
     {
         model.speed = speed;
         char speed_str[4];
-        itoa(speed, speed_str, 10);
+        uint8_t speed_100 = speed / 160.9f;
+        itoa(speed_100, speed_str, 10);
         // Generate color gradient
-        uint16_t speed_color = speed;
+        uint16_t speed_color = speed_100;
         if (speed_color > 44)
         {
             speed_color = 44;
@@ -149,7 +151,7 @@ void set_speed(uint16_t speed)
         rgb_t *new_color = gradient_get_color(color_index);
         lv_color_t color = lv_color_make(new_color->red, new_color->green, new_color->blue);
         model.speed_color = new_color;
-        lv_arc_set_value(ui_SpeedMeter, speed);
+        lv_arc_set_value(ui_SpeedMeter, speed_100);
         lv_obj_set_style_arc_color(ui_SpeedMeter, color, LV_PART_INDICATOR | LV_STATE_DEFAULT);
         lv_label_set_text(ui_SpeedValue, speed_str);
     }
@@ -161,7 +163,7 @@ void set_current(int16_t amps)
     {
         model.current = amps;
         char current_str[8];
-        itoa(amps, current_str, 10);
+        itoa(amps / 100, current_str, 10);
         strcat(current_str, "A");
         // Generate color gradient
         lv_color_t color = lv_color_hex(0xFFFFFF);
@@ -175,11 +177,11 @@ void set_temp(uint16_t temp)
     {
         model.temp = temp;
         char temp_str[4];
-        int8_t temp_f = (temp * (9.0 / 5.0)) + 32.0;
+        int8_t temp_f = ((temp / 100) * (9.0 / 5.0)) + 32.0;
         itoa(temp_f, temp_str, 10);
         // strcat(temp_str, "C");
         // Generate color gradient
-        lv_color_t color = lv_color_hex(0xFFFFFF);
+        // lv_color_t color = lv_color_hex(0xFFFFFF);
         lv_label_set_text(ui_TempValue, temp_str);
     }
 }
@@ -242,7 +244,7 @@ void set_batt_percent(uint16_t batt_percent)
 
 void update_power()
 {
-    int16_t new_power = model.voltage * model.current;
+    int16_t new_power = (model.voltage * model.current) / 10000;
 
     if (model.power != new_power)
     {

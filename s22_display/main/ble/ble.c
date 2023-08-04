@@ -88,10 +88,10 @@ static void wheel_event_task(void *param)
             switch (packet.command)
             {
             case 0xA9:
-                uint16_t voltage = decode_2byte_unsigned(&packet.payload[0]) / 100;
-                uint16_t speed = decode_2byte_unsigned(&packet.payload[2]) / 100;
-                int16_t current = decode_2byte_signed(&packet.payload[8]) / 100;
-                uint16_t temp = decode_2byte_unsigned(&packet.payload[10]) / 100;
+                uint16_t voltage = decode_2byte_unsigned(&packet.payload[0]);
+                uint16_t speed = decode_2byte_unsigned(&packet.payload[2]);
+                int16_t current = decode_2byte_signed(&packet.payload[8]);
+                uint16_t temp = decode_2byte_unsigned(&packet.payload[10]);
                 // uint32_t odo = decode_4byte_unsigned(&packet.payload[4]) / 1000;
                 // ESP_LOGI(TAG, "Got VSOCT : %u %u %lu %d %u", voltage, speed, odo, current, temp);
                 set_speed(speed);
