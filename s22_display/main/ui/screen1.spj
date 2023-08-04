@@ -3432,7 +3432,7 @@
               {
                 "nid": 30434175,
                 "strtype": "ARC/Value",
-                "integer": 100,
+                "integer": 50,
                 "InheritedType": 6
               },
               {
@@ -3905,7 +3905,7 @@
                 "flags": 17,
                 "strtype": "OBJECT/Position",
                 "intarray": [
-                  60,
+                  50,
                   -20
                 ],
                 "InheritedType": 7
@@ -4698,7 +4698,7 @@
               {
                 "nid": 773179307,
                 "strtype": "LABEL/Text",
-                "strval": "PWM",
+                "strval": "Power",
                 "InheritedType": 10
               },
               {
@@ -11560,7 +11560,7 @@
     "theme_color2": 0,
     "exportFolderPath": "/Users/jeremy.prater/src/ks-s22-mods/s22_display/main/ui",
     "projectExportFolderPath": "/Users/jeremy.prater/src/ks-s22-mods/s22_display/main/ui",
-    "backup_cnt": 46,
+    "backup_cnt": 48,
     "autosave_cnt": 0,
     "lvgl_version": "8.3.6",
     "callfuncsexport": "C_FILE",

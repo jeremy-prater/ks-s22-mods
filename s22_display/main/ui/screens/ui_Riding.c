@@ -39,7 +39,7 @@ lv_obj_set_height( ui_PWMMeter, 320);
 lv_obj_set_x( ui_PWMMeter, 0 );
 lv_obj_set_y( ui_PWMMeter, 40 );
 lv_obj_set_align( ui_PWMMeter, LV_ALIGN_CENTER );
-lv_arc_set_value(ui_PWMMeter, 100);
+lv_arc_set_value(ui_PWMMeter, 50);
 lv_arc_set_bg_angles(ui_PWMMeter,270,0);
 lv_obj_set_style_arc_color(ui_PWMMeter, lv_color_hex(0xFF8940), LV_PART_MAIN | LV_STATE_DEFAULT );
 lv_obj_set_style_arc_opa(ui_PWMMeter, 255, LV_PART_MAIN| LV_STATE_DEFAULT);
@@ -68,7 +68,7 @@ lv_obj_set_style_text_font(ui_SpeedValue, &lv_font_montserrat_48, LV_PART_MAIN| 
 ui_PWMValue = lv_label_create(ui_Riding);
 lv_obj_set_width( ui_PWMValue, LV_SIZE_CONTENT);  /// 1
 lv_obj_set_height( ui_PWMValue, LV_SIZE_CONTENT);   /// 1
-lv_obj_set_x( ui_PWMValue, 60 );
+lv_obj_set_x( ui_PWMValue, 50 );
 lv_obj_set_y( ui_PWMValue, -20 );
 lv_obj_set_align( ui_PWMValue, LV_ALIGN_CENTER );
 lv_label_set_text(ui_PWMValue,"0");
@@ -89,7 +89,7 @@ lv_obj_set_height( ui_PWMLabel, LV_SIZE_CONTENT);   /// 1
 lv_obj_set_x( ui_PWMLabel, 60 );
 lv_obj_set_y( ui_PWMLabel, 20 );
 lv_obj_set_align( ui_PWMLabel, LV_ALIGN_CENTER );
-lv_label_set_text(ui_PWMLabel,"PWM");
+lv_label_set_text(ui_PWMLabel,"Power");
 lv_obj_set_style_text_font(ui_PWMLabel, &lv_font_montserrat_30, LV_PART_MAIN| LV_STATE_DEFAULT);
 
 ui_BatteryValue = lv_label_create(ui_Riding);
