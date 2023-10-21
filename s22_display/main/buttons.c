@@ -72,6 +72,10 @@ static void button_middle_event(button_t *btn, button_state_t state)
         {
             ble_connect_selected_euc();
         }
+        else if (lv_scr_act() == ui_Riding)
+        {
+            toggle_lights();
+        }
         break;
     case BUTTON_PRESSED_LONG:
         ESP_LOGI(TAG, "Middle button long press");

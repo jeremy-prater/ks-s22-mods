@@ -206,6 +206,22 @@ void ble_connect_selected_euc()
     }
     xSemaphoreGive(discovered_euc_lock);
 }
+
+void toggle_lights()
+{
+    static bool light_mode = false;
+    ESP_LOGI(TAG, "Toggle head lights");
+    s22_packet packet = s22_packet_new();
+
+    packet.command = 0x73;
+    packet.payload[0] = 0x12 + light_mode;
+    packet.payload[1] = 0x1;
+
+    send_packet(&packet);
+
+    light_mode = !light_mode;
+}
+
 /**
  * Initiates the GAP general discovery procedure.
  */

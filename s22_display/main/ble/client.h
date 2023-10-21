@@ -26,6 +26,7 @@ extern "C"
 
     void ble_select_next_euc(bool direction);
     void ble_connect_selected_euc();
+    void toggle_lights();
 
 #ifdef __cplusplus
 } /*extern "C"*/
